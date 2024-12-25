@@ -1,5 +1,6 @@
 package com.example.prello.member;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -13,5 +14,5 @@ public class MemberResponseDto {
 
     private final String email;
 
-    private final Auth auth;
+    private final MemberAuth memberAuth;
 }

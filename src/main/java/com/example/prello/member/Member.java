@@ -25,7 +25,12 @@ public class Member extends BaseEntity {
 
     @Column(nullable = false, columnDefinition = "varchar(20) default 'READ_ONLY'")
     @Enumerated(EnumType.STRING)
-    private Auth auth;
+    private MemberAuth auth;
 
     public Member() {}
+
+    public void updateMemberAuth(MemberAuth auth) throws IllegalAccessException {
+        this.auth.validateAuthChange(auth);
+        this.auth = auth;
+    }
 }

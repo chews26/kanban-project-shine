@@ -3,4 +3,6 @@ package com.example.prello.member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
+
+    Member findByIdAndAuth(Long id, MemberAuth auth);
 }

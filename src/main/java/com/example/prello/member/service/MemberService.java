@@ -26,6 +26,6 @@ public class MemberService {
 
         member.updateMemberAuth(memberRequestDto.getMemberAuth());
 
-        return new MemberResponseDto(member.getId(), "이름 추가 필요", "이메일 추가 필요", member.getAuth());
+        return MemberResponseDto.toDto(member);
     }
 }

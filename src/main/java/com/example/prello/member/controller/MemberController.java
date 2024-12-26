@@ -4,6 +4,7 @@ import com.example.prello.member.dto.MemberRequestDto;
 import com.example.prello.member.dto.MemberResponseDto;
 import com.example.prello.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +22,7 @@ public class MemberController {
             @PathVariable Long id,
             @RequestBody MemberRequestDto memberRequestDto
     ) throws IllegalAccessException {
-        MemberResponseDto updatedMemberAuth = memberService.updateMemberAuth(id, memberRequestDto);
-        return ResponseEntity.ok().body(updatedMemberAuth);
+        MemberResponseDto updatedMemberAuth = memberService.updateMemberAuth(workspaceId, id, memberRequestDto);
+        return new ResponseEntity<>(updatedMemberAuth, HttpStatus.OK);
     }
 }

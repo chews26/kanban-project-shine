@@ -1,5 +1,10 @@
-package com.example.prello.card;
+package com.example.prello.card.controller;
 
+import com.example.prello.card.dto.CardAssigneesRequestDto;
+import com.example.prello.card.dto.CardDetailResponseDto;
+import com.example.prello.card.dto.CardRequestDto;
+import com.example.prello.card.dto.CardResponseDto;
+import com.example.prello.card.service.CardService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -8,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/workspaces/{workspaceId}/boards/{boardId}/lists/{listId}/cards")
+@RequestMapping("/api/workspaces/{workspaceId}/boards/{boardId}/decks/{deckId}/cards")
 public class CardController {
 
     private final CardService cardService;
@@ -18,7 +23,7 @@ public class CardController {
      *
      * @param workspaceId 워크스페이스 식별자
      * @param boardId     보드 식별자
-     * @param listId      리스트 식별자
+     * @param deckId      리스트 식별자
      * @param dto         {@link CardRequestDto}
      * @return 201 CREATED
      */
@@ -26,11 +31,11 @@ public class CardController {
     public ResponseEntity<CardResponseDto> createCard(
             @PathVariable Long workspaceId,
             @PathVariable Long boardId,
-            @PathVariable Long listId,
+            @PathVariable Long deckId,
             @Valid @RequestBody CardRequestDto dto
     ) {
 
-        CardResponseDto cardResponseDto = cardService.createCard(workspaceId, boardId, listId, dto);
+        CardResponseDto cardResponseDto = cardService.createCard(workspaceId, boardId, deckId, dto);
 
         return new ResponseEntity<>(cardResponseDto, HttpStatus.CREATED);
     }
@@ -46,12 +51,12 @@ public class CardController {
     public ResponseEntity<CardResponseDto> updateCard(
             @PathVariable Long workspaceId,
             @PathVariable Long boardId,
-            @PathVariable Long listId,
+            @PathVariable Long deckId,
             @PathVariable Long id,
             @RequestBody CardRequestDto dto
     ) {
 
-        CardResponseDto cardResponseDto = cardService.updateCard(workspaceId, boardId, listId, id, dto);
+        CardResponseDto cardResponseDto = cardService.updateCard(workspaceId, boardId, deckId, id, dto);
         return ResponseEntity.ok(cardResponseDto);
     }
 
@@ -66,12 +71,12 @@ public class CardController {
     public ResponseEntity<String> updateAssignees(
             @PathVariable Long workspaceId,
             @PathVariable Long boardId,
-            @PathVariable Long listId,
+            @PathVariable Long deckId,
             @PathVariable Long id,
             @Valid @RequestBody CardAssigneesRequestDto dto
     ) {
 
-        cardService.updateAssignees(workspaceId, boardId, listId, id, dto);
+        cardService.updateAssignees(workspaceId, boardId, deckId, id, dto);
         return ResponseEntity.ok("담당자가 추가되었습니다.");
     }
 
@@ -85,11 +90,11 @@ public class CardController {
     public ResponseEntity<CardDetailResponseDto> findCard(
             @PathVariable Long workspaceId,
             @PathVariable Long boardId,
-            @PathVariable Long listId,
+            @PathVariable Long deckId,
             @PathVariable Long id
     ) {
 
-        CardDetailResponseDto cardDetailResponseDto = cardService.findCard(workspaceId, boardId, listId, id);
+        CardDetailResponseDto cardDetailResponseDto = cardService.findCard(workspaceId, boardId, deckId, id);
         return ResponseEntity.ok(cardDetailResponseDto);
     }
 
@@ -103,11 +108,11 @@ public class CardController {
     public ResponseEntity<String> deleteCard(
             @PathVariable Long workspaceId,
             @PathVariable Long boardId,
-            @PathVariable Long listId,
+            @PathVariable Long deckId,
             @PathVariable Long id
     ) {
 
-        cardService.deleteCard(workspaceId, boardId, listId, id);
+        cardService.deleteCard(workspaceId, boardId, deckId, id);
         return ResponseEntity.ok("카드가 삭제되었습니다.");
     }
 }

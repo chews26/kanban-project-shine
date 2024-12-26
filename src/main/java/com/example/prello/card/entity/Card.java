@@ -1,15 +1,18 @@
-package com.example.prello.card;
+package com.example.prello.card.entity;
 
 import com.example.prello.common.BaseEntity;
-import com.example.prello.list.List;
+import com.example.prello.list.Deck;
 import com.example.prello.user.User;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Builder(builderClassName = "Builder", access = AccessLevel.PUBLIC)
 @Table(name = "`card`")
 public class Card extends BaseEntity {
     @Id
@@ -18,7 +21,7 @@ public class Card extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "list_id")
-    private List list;
+    private Deck deck;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -34,8 +37,8 @@ public class Card extends BaseEntity {
 
     public Card(){}
 
-    public Card(List list, String title, String description, LocalDateTime endAt) {
-        this.list = list;
+    public Card(Deck deck, String title, String description, LocalDateTime endAt) {
+        this.deck = deck;
         this.title = title;
         this.description = description;
         this.endAt = endAt;

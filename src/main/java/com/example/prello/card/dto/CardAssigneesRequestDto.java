@@ -1,4 +1,4 @@
-package com.example.prello.card;
+package com.example.prello.card.dto;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

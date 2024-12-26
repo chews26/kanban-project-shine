@@ -1,5 +1,6 @@
-package com.example.prello.card;
+package com.example.prello.card.dto;
 
+import com.example.prello.card.entity.Card;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -21,12 +22,14 @@ public class CardResponseDto {
 
     private final LocalDateTime updatedAt;
 
-    public CardResponseDto(Card card) {
-        this.id = card.getId();
-        this.title = card.getTitle();
-        this.description = card.getDescription();
-        this.endAt = card.getEndAt();
-        this.createdAt = card.getCreatedAt();
-        this.updatedAt = card.getUpdatedAt();
+    public static CardResponseDto toDto(Card card) {
+        return new CardResponseDto(
+                card.getId(),
+                card.getTitle(),
+                card.getDescription(),
+                card.getEndAt(),
+                card.getCreatedAt(),
+                card.getUpdatedAt()
+        );
     }
 }

@@ -1,12 +1,15 @@
 package com.example.prello.attachment;
 
-import com.example.prello.card.Card;
+import com.example.prello.card.entity.Card;
 import com.example.prello.common.BaseEntity;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 
 @Entity
 @Getter
+@Builder(builderClassName = "Builder", access = AccessLevel.PUBLIC)
 @Table(name = "`attachment`")
 public class Attachment extends BaseEntity {
     @Id

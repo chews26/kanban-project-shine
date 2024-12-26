@@ -1,7 +1,13 @@
-package com.example.prello.card;
+package com.example.prello.card.service;
 
+import com.example.prello.card.dto.CardAssigneesRequestDto;
+import com.example.prello.card.dto.CardDetailResponseDto;
+import com.example.prello.card.dto.CardRequestDto;
+import com.example.prello.card.dto.CardResponseDto;
+import com.example.prello.card.entity.Card;
+import com.example.prello.card.repository.CardRepository;
 import com.example.prello.comment.Comment;
-import com.example.prello.list.List;
+import com.example.prello.list.Deck;
 import com.example.prello.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -11,6 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -24,20 +31,26 @@ public class CardService {
      * @return 새로 생성한 Card 내용의 CardResponseDto
      */
     @Transactional
-    public CardResponseDto createCard(Long workspaceId, Long boardId, Long listId, CardRequestDto dto) {
-        checkPathVariable(workspaceId, boardId, listId);
-        // TODO: 유의미한 findList 로 수정
-        List findList = new List();
+    public CardResponseDto createCard(Long workspaceId, Long boardId, Long deckId, CardRequestDto dto) {
+        checkPathVariable(workspaceId, boardId, deckId);
+        // TODO: 유의미한 findDeck 로 수정
+        Deck findDeck = new Deck();
 
         // TODO - 회의: 서비스 방식
         if (dto.getEndAt().isBefore(LocalDateTime.now())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "마감일은 현재 시간 이전일 수 없습니다.");
         }
 
-        Card card = new Card(findList, dto.getTitle(), dto.getDescription(), dto.getEndAt());
+        Card card = new Card.Builder()
+                .deck(findDeck)
+                .title(dto.getTitle())
+                .description(dto.getDescription())
+                .endAt(dto.getEndAt())
+                .build();
+
         Card savedCard = cardRepository.save(card);
 
-        return new CardResponseDto(savedCard);
+        return CardResponseDto.toDto(savedCard);
     }
 
     /**
@@ -48,12 +61,12 @@ public class CardService {
      * @return 수정한 Card 내용의 CardResponseDto
      */
     @Transactional
-    public CardResponseDto updateCard(Long workspaceId, Long boardId, Long listId, Long cardId, CardRequestDto dto) {
-        checkPathVariable(workspaceId, boardId, listId);
+    public CardResponseDto updateCard(Long workspaceId, Long boardId, Long deckId, Long cardId, CardRequestDto dto) {
+        checkPathVariable(workspaceId, boardId, deckId);
         Card findCard = findCardById(cardId);
         findCard.updateCard(dto.getTitle(), dto.getDescription(), dto.getEndAt());
 
-        return new CardResponseDto(findCard);
+        return CardResponseDto.toDto(findCard);
     }
 
     /**
@@ -62,13 +75,12 @@ public class CardService {
      * @param id 카드 식별자
      * @return Comment 목록 포함한 Card dto
      */
-    public CardDetailResponseDto findCard(Long workspaceId, Long boardId, Long listId, Long id) {
-        checkPathVariable(workspaceId, boardId, listId);
+    public CardDetailResponseDto findCard(Long workspaceId, Long boardId, Long deckId, Long id) {
+        checkPathVariable(workspaceId, boardId, deckId);
         Card findCard = findCardById(id);
 
         // TODO: 댓글 찾기
-        // TODO - 회의: List 이름 바꾸는 거 어떠신가요....
-        java.util.List<Comment> comments = new ArrayList<>();
+        List<Comment> comments = new ArrayList<>();
 
         return new CardDetailResponseDto(findCard, comments);
     }
@@ -79,8 +91,8 @@ public class CardService {
      * @param id 카드 식별자
      */
     @Transactional
-    public void deleteCard(Long workspaceId, Long boardId, Long listId, Long id) {
-        checkPathVariable(workspaceId, boardId, listId);
+    public void deleteCard(Long workspaceId, Long boardId, Long deckId, Long id) {
+        checkPathVariable(workspaceId, boardId, deckId);
         Card findCard = findCardById(id);
 
         // TODO - 회의: 논리 삭제?
@@ -92,8 +104,8 @@ public class CardService {
      * @param id 카드 식별자
      */
     @Transactional
-    public void updateAssignees(Long workspaceId, Long boardId, Long listId, Long id, CardAssigneesRequestDto dto) {
-        checkPathVariable(workspaceId, boardId, listId);
+    public void updateAssignees(Long workspaceId, Long boardId, Long deckId, Long id, CardAssigneesRequestDto dto) {
+        checkPathVariable(workspaceId, boardId, deckId);
         Card findCard = findCardById(id);
 
         // TODO: 유의미한 User 로 변경
@@ -110,14 +122,15 @@ public class CardService {
      * @return id에 해당하는 Card
      */
     public Card findCardById(Long id) {
-        return cardRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return cardRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     // TODO: 검증 로직 메서드화
-    private void checkPathVariable(Long workspaceId, Long BoardId, Long ListId) {
+    private void checkPathVariable(Long workspaceId, Long boardId, Long deckId) {
         // TODO: 해당 service 단의 find 메서드로 바꾸기
         //  workspaceId 검증
         //  boardId 검증
-        //  listId 검증
+        //  deckId 검증
     }
 }

@@ -36,10 +36,10 @@ public class CardService {
         // TODO: 유의미한 findDeck 로 수정
         Deck findDeck = new Deck();
 
-        // TODO - 회의: 서비스 방식
-        if (dto.getEndAt().isBefore(LocalDateTime.now())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "마감일은 현재 시간 이전일 수 없습니다.");
-        }
+//        // TODO - 회의: 서비스 방식
+//        if (dto.getEndAt().isBefore(LocalDateTime.now())) {
+//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "마감일은 현재 시간 이전일 수 없습니다.");
+//        }
 
         Card card = Card.builder()
                 .deck(findDeck)
@@ -63,7 +63,7 @@ public class CardService {
     @Transactional
     public CardResponseDto updateCard(Long workspaceId, Long boardId, Long deckId, Long cardId, CardRequestDto dto) {
         checkPathVariable(workspaceId, boardId, deckId);
-        Card findCard = findCardById(cardId);
+        Card findCard = findCardByIdOrElseThrow(cardId);
         findCard.updateCard(dto.getTitle(), dto.getDescription(), dto.getEndAt());
 
         return CardResponseDto.toDto(findCard);
@@ -77,7 +77,7 @@ public class CardService {
      */
     public CardDetailResponseDto findCard(Long workspaceId, Long boardId, Long deckId, Long id) {
         checkPathVariable(workspaceId, boardId, deckId);
-        Card findCard = findCardById(id);
+        Card findCard = findCardByIdOrElseThrow(id);
 
         // TODO: 댓글 찾기
         List<Comment> comments = new ArrayList<>();
@@ -93,7 +93,7 @@ public class CardService {
     @Transactional
     public void deleteCard(Long workspaceId, Long boardId, Long deckId, Long id) {
         checkPathVariable(workspaceId, boardId, deckId);
-        Card findCard = findCardById(id);
+        Card findCard = findCardByIdOrElseThrow(id);
 
         // TODO - 회의: 논리 삭제?
     }
@@ -106,7 +106,7 @@ public class CardService {
     @Transactional
     public void updateAssignees(Long workspaceId, Long boardId, Long deckId, Long id, CardAssigneesRequestDto dto) {
         checkPathVariable(workspaceId, boardId, deckId);
-        Card findCard = findCardById(id);
+        Card findCard = findCardByIdOrElseThrow(id);
 
         // TODO: 유의미한 User 로 변경
         // userService.findUserByIdOrElseThrow(dto.getUserId());
@@ -121,7 +121,7 @@ public class CardService {
      * @param id 카드 식별자
      * @return id에 해당하는 Card
      */
-    public Card findCardById(Long id) {
+    public Card findCardByIdOrElseThrow(Long id) {
         return cardRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }

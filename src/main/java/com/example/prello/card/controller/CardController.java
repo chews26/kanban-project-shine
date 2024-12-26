@@ -57,7 +57,7 @@ public class CardController {
     ) {
 
         CardResponseDto cardResponseDto = cardService.updateCard(workspaceId, boardId, deckId, id, dto);
-        return ResponseEntity.ok(cardResponseDto);
+        return new ResponseEntity<>(cardResponseDto, HttpStatus.OK);
     }
 
     /**
@@ -77,7 +77,7 @@ public class CardController {
     ) {
 
         cardService.updateAssignees(workspaceId, boardId, deckId, id, dto);
-        return ResponseEntity.ok("담당자가 추가되었습니다.");
+        return new ResponseEntity<>("담당자가 추가되었습니다.", HttpStatus.OK);
     }
 
     /**
@@ -95,7 +95,7 @@ public class CardController {
     ) {
 
         CardDetailResponseDto cardDetailResponseDto = cardService.findCard(workspaceId, boardId, deckId, id);
-        return ResponseEntity.ok(cardDetailResponseDto);
+        return new ResponseEntity<>(cardDetailResponseDto, HttpStatus.OK);
     }
 
     /**
@@ -113,6 +113,6 @@ public class CardController {
     ) {
 
         cardService.deleteCard(workspaceId, boardId, deckId, id);
-        return ResponseEntity.ok("카드가 삭제되었습니다.");
+        return new ResponseEntity<>("카드가 삭제되었습니다.", HttpStatus.OK);
     }
 }

@@ -4,15 +4,14 @@ import com.example.prello.common.BaseEntity;
 import com.example.prello.list.Deck;
 import com.example.prello.user.User;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Builder(builderClassName = "Builder", access = AccessLevel.PUBLIC)
+@Builder(builderClassName = "Builder")
 @Table(name = "`card`")
 public class Card extends BaseEntity {
     @Id
@@ -28,12 +27,22 @@ public class Card extends BaseEntity {
     private User user;
 
     @Column(nullable = false, length = 10)
+    @Size(max = 10, message = "카드 제목은 10자 이내여야 합니다.")
     private String title;
 
     @Column(columnDefinition = "TEXT")
     private String description;
 
     private LocalDateTime endAt;
+
+    public Card(){}
+
+    public Card(Deck deck, String title, String description, LocalDateTime endAt) {
+        this.deck = deck;
+        this.title = title;
+        this.description = description;
+        this.endAt = endAt;
+    }
 
     /**
      * 담당자 추가

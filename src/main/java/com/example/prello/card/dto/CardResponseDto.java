@@ -1,12 +1,14 @@
 package com.example.prello.card.dto;
 
 import com.example.prello.card.entity.Card;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Getter
+@Builder
 @RequiredArgsConstructor
 public class CardResponseDto {
 

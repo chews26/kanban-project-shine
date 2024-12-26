@@ -3,13 +3,13 @@ package com.example.prello.attachment;
 import com.example.prello.card.entity.Card;
 import com.example.prello.common.BaseEntity;
 import jakarta.persistence.*;
-import lombok.*;
+import jakarta.validation.constraints.Size;
+import lombok.Builder;
+import lombok.Getter;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Builder(builderClassName = "Builder", access = AccessLevel.PUBLIC)
+@Builder(builderClassName = "Builder")
 @Table(name = "`attachment`")
 public class Attachment extends BaseEntity {
     @Id
@@ -24,5 +24,20 @@ public class Attachment extends BaseEntity {
 
     private String fileUrl;
 
+    @Column(length = 10)
+    @Size(max = 10, message = "파일 형식은 10자 이내여야 합니다.")
     private String fileType;
+
+    public Attachment() {
+    }
+
+    public Attachment(String fileName, String fileUrl, String fileType) {
+        this.fileName = fileName;
+        this.fileUrl = fileUrl;
+        this.fileType = fileType;
+    }
+
+    public void addAttachmentToCard(Card card) {
+        this.card = card;
+    }
 }

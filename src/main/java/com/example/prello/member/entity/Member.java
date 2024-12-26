@@ -2,16 +2,19 @@ package com.example.prello.member.entity;
 
 import com.example.prello.common.BaseEntity;
 import com.example.prello.member.auth.MemberAuth;
-import com.example.prello.user.User;
-import com.example.prello.workspace.Workspace;
+import com.example.prello.user.entity.User;
+import com.example.prello.workspace.entity.Workspace;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import org.hibernate.annotations.DynamicInsert;
 
 @Entity
 @Getter
-@Builder
+@Builder(builderClassName = "Builder")
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Table(name = "`member`")
 @DynamicInsert
 public class Member extends BaseEntity {

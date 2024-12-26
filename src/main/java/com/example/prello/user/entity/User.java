@@ -4,16 +4,15 @@ import com.example.prello.common.BaseEntity;
 import com.example.prello.user.dto.SignUpRequestDto;
 import com.example.prello.user.enums.Auth;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Table(name = "`user`")
-@Builder
+@Builder(builderClassName = "Builder")
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class User extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

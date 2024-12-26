@@ -15,10 +15,13 @@ public class MemberController {
     private final MemberService memberService;
 
     //todo 멤버 권한 변경
-    @PatchMapping("/{Id}")
-    public ResponseEntity<MemberResponseDto> updateMemberAuth(@PathVariable Long Id, @RequestBody MemberRequestDto memberRequestDto
+    @PatchMapping("/{id}")
+    public ResponseEntity<MemberResponseDto> updateMemberAuth(
+            @PathVariable Long workspaceId,
+            @PathVariable Long id,
+            @RequestBody MemberRequestDto memberRequestDto
     ) throws IllegalAccessException {
-        MemberResponseDto updatedMemberAuth = memberService.updateMemberAuth(Id, memberRequestDto);
+        MemberResponseDto updatedMemberAuth = memberService.updateMemberAuth(id, memberRequestDto);
         return ResponseEntity.ok().body(updatedMemberAuth);
     }
 }

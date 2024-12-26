@@ -75,4 +75,9 @@ public class WorkspaceService {
     public List<WorkspaceMemberResponseDto> getWorkspaceMembers() {
         return null;
     }
+
+    public Workspace findByIdOrElseThrow(Long id) {
+        return workspaceRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException(""));
+    }
 }

@@ -8,7 +8,7 @@ import lombok.Getter;
 
 @Entity
 @Getter
-@Table(name = "`Deck`")
+@Table(name = "`deck`")
 public class Deck extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -5,10 +5,12 @@ import com.example.prello.user.User;
 import com.example.prello.workspace.Workspace;
 import jakarta.persistence.*;
 import lombok.Getter;
+import org.hibernate.annotations.DynamicInsert;
 
 @Entity
 @Getter
 @Table(name = "`member`")
+@DynamicInsert
 public class Member extends BaseEntity {
 
     @Id

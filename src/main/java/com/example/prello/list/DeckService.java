@@ -9,22 +9,22 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class ListService {
+public class DeckService {
 
     private final WorkspaceService workspaceService;
     private final BoardService boardService;
-    private final ListRepository listRepository;
+    private final DeckRepository listRepository;
 
-    public static BoardListResponseDto createList(Long workspaceId, Long boardId, BoardListRequestDto boardListRequestDto) {
+    public static DeckResponseDto createList(Long workspaceId, Long boardId, DeckRequestDto boardListRequestDto) {
         Workspace workspace = workspaceService.findById(workspaceId)
                 .orElseThrow(() -> new IllegalArgumentException("워크스페이스를 찾을 수 없습니다."));
 
         Board board = boardService.findById(boardId)
                 .orElseThrow(() -> new IllegalArgumentException("보드를 찾을 수 없습니다."));
 
-        BoardList boardList = new BoardList(boardListRequestDto.getTitle(),"0", board);
+        Deck boardList = new Deck(boardListRequestDto.getTitle(),"0", board);
 
-        return new BoardListResponseDto(
+        return new DeckResponseDto(
                 boardList.getId(),
                 boardList.getTitle(),
                 boardList.getOrder(),

@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface ListRepository extends JpaRepository<BoardList, Long> {
-    List<BoardList> findByBoard(Board board);
+public interface DeckRepository extends JpaRepository<Deck, Long> {
+    List<Deck> findByBoard(Board board);
 }

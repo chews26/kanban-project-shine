@@ -1,22 +1,21 @@
 package com.example.prello.list;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/workspaces/{workspaceId}/boards/{boardId}/lists")
-public class ListController {
+public class DeckController {
 
-    private final ListService listService;
+    private final DeckService listService;
 
     //리스트 생성
     @PostMapping
-    public BoardListResponseDto createBoardList(
+    public DeckResponseDto createBoardList(
         @PathVariable Long workspaceId,
         @PathVariable Long boardId,
-        @RequestBody BoardListRequestDto boardListRequestDto) {
-        return ListService.createList(workspaceId, boardId, boardListRequestDto);
+        @RequestBody DeckRequestDto boardListRequestDto) {
+        return DeckService.createList(workspaceId, boardId, boardListRequestDto);
     }
 }

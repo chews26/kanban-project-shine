@@ -8,7 +8,7 @@ import lombok.Getter;
 @Entity
 @Getter
 @Table(name = "`boardlist`")
-public class BoardList extends BaseEntity {
+public class Deck extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,9 +23,9 @@ public class BoardList extends BaseEntity {
     @JoinColumn(name = "board_id", nullable = false)
     private Board board;
 
-    public BoardList() {}
+    public Deck() {}
 
-    public BoardList(String title, int order, Board board) {
+    public Deck(String title, int order, Board board) {
         this.title = title;
         this.order = order;
         this.board = board;

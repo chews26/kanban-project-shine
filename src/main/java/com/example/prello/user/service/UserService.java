@@ -47,8 +47,13 @@ public class UserService {
         }
     }
 
+    public void delete(String email, String password) {
+        User findUser = userRepository.findByEmailOrElseThrow(email);
 
+        if(!PasswordEncoder.matches(password, findUser.getPassword())){
+            throw new IllegalArgumentException(UserErrorCode.INVALID_PASSWORD.getMessage());
+        }
 
-
-
+        findUser.deleteSoftly(LocalDateTime.now());
+    }
 }

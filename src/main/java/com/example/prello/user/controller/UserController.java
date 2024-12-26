@@ -34,5 +34,15 @@ public class UserController {
         return new ResponseEntity<>("로그인을 성공했습니다.", HttpStatus.OK);
     }
 
+    @DeleteMapping("/delete-account")
+    public ResponseEntity<String> delete(@SessionAttribute("email") String email, @RequestBody String password, HttpServletRequest request) {
+        userService.delete(email, password);
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+
+        return new ResponseEntity<>("탈퇴가 완료되었습니다.", HttpStatus.OK);
+    }
 
 }

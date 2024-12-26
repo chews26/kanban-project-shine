@@ -1,6 +1,7 @@
-package com.example.prello.list;
+package com.example.prello.list.repository;
 
 import com.example.prello.board.Board;
+import com.example.prello.list.entity.Deck;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

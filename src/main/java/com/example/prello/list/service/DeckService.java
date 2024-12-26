@@ -1,15 +1,16 @@
-package com.example.prello.list;
+package com.example.prello.list.service;
 
 import com.example.prello.board.Board;
 import com.example.prello.board.BoardService;
-import com.example.prello.workspace.Workspace;
+import com.example.prello.list.repository.DeckRepository;
+import com.example.prello.list.dto.DeckRequestDto;
+import com.example.prello.list.dto.DeckResponseDto;
+import com.example.prello.list.entity.Deck;
 import com.example.prello.workspace.WorkspaceService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

@@ -25,6 +25,14 @@ public class UserController {
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@Valid @RequestBody LoginRequestDto requestDto, HttpServletRequest request) {
+        userService.login(requestDto);
+        HttpSession session = request.getSession();
+        session.setAttribute("email", requestDto.getEmail());
+
+        return new ResponseEntity<>("로그인을 성공했습니다.", HttpStatus.OK);
+    }
 
 
 }

@@ -37,6 +37,18 @@ public class UserService {
         return new UserResponseDto(savedUser);
     }
 
+    public void login(LoginRequestDto requestDto) {
+        User findUser = userRepository.findByEmailOrElseThrow(requestDto.getEmail());
+        if(findUser.getDeletedAt()!=null) {
+            throw new IllegalArgumentException(UserErrorCode.DELETED_ACCOUNT.getMessage());
+        }
+        if(!PasswordEncoder.matches(requestDto.getPassword(), findUser.getPassword())) {
+            throw new IllegalArgumentException(UserErrorCode.INVALID_PASSWORD.getMessage());
+        }
+    }
+
+
+
 
 
 }

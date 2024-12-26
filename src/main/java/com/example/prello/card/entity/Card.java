@@ -4,14 +4,14 @@ import com.example.prello.common.BaseEntity;
 import com.example.prello.list.Deck;
 import com.example.prello.user.User;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(builderClassName = "Builder", access = AccessLevel.PUBLIC)
 @Table(name = "`card`")
 public class Card extends BaseEntity {
@@ -34,15 +34,6 @@ public class Card extends BaseEntity {
     private String description;
 
     private LocalDateTime endAt;
-
-    public Card(){}
-
-    public Card(Deck deck, String title, String description, LocalDateTime endAt) {
-        this.deck = deck;
-        this.title = title;
-        this.description = description;
-        this.endAt = endAt;
-    }
 
     /**
      * 담당자 추가

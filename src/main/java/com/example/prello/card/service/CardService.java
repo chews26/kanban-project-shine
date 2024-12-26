@@ -41,7 +41,7 @@ public class CardService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "마감일은 현재 시간 이전일 수 없습니다.");
         }
 
-        Card card = new Card.Builder()
+        Card card = Card.builder()
                 .deck(findDeck)
                 .title(dto.getTitle())
                 .description(dto.getDescription())

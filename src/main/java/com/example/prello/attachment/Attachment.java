@@ -3,12 +3,12 @@ package com.example.prello.attachment;
 import com.example.prello.card.entity.Card;
 import com.example.prello.common.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(builderClassName = "Builder", access = AccessLevel.PUBLIC)
 @Table(name = "`attachment`")
 public class Attachment extends BaseEntity {
@@ -25,13 +25,4 @@ public class Attachment extends BaseEntity {
     private String fileUrl;
 
     private String fileType;
-
-    public Attachment() {}
-
-    public Attachment(Card card, String fileName, String fileUrl, String fileType) {
-        this.card = card;
-        this.fileName = fileName;
-        this.fileUrl = fileUrl;
-        this.fileType = fileType;
-    }
 }

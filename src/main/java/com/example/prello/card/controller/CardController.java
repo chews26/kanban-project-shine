@@ -67,7 +67,7 @@ public class CardController {
      * @param dto 담당자 id 포함 request dto
      * @return 200 OK
      */
-    @PatchMapping("/{id}")
+    @PatchMapping("/{id}/update-assignees")
     public ResponseEntity<String> updateAssignees(
             @PathVariable Long workspaceId,
             @PathVariable Long boardId,

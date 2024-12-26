@@ -6,7 +6,7 @@ import com.example.prello.deck.repository.DeckRepository;
 import com.example.prello.deck.dto.DeckRequestDto;
 import com.example.prello.deck.dto.DeckResponseDto;
 import com.example.prello.deck.entity.Deck;
-import com.example.prello.workspace.WorkspaceService;
+import com.example.prello.workspace.service.WorkspaceService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -79,11 +79,9 @@ public class DeckService {
     //workspace, board 검증 및 board 반환
     private Board checkPathVariable(Long workspaceId, Long boardId) {
         //workspace 검증
-        workspaceService.findById(workspaceId)
-                .orElseThrow(() -> new IllegalArgumentException("워크스페이스를 찾을 수 없습니다."));
+        workspaceService.findByIdOrElseThrow(workspaceId);
 
         //board 검증
-        return boardService.findById(boardId)
-                .orElseThrow(() -> new IllegalArgumentException("보드를 찾을 수 없습니다."));
+        return boardService.findByIdOrElseThrow(boardId);
     }
 }

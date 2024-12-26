@@ -1,8 +1,8 @@
 package com.example.prello.card.entity;
 
 import com.example.prello.common.BaseEntity;
-import com.example.prello.list.Deck;
-import com.example.prello.user.User;
+import com.example.prello.deck.entity.Deck;
+import com.example.prello.user.entity.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Builder(builderClassName = "Builder")
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Table(name = "`card`")
 public class Card extends BaseEntity {
     @Id

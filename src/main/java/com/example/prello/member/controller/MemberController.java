@@ -1,5 +1,8 @@
-package com.example.prello.member;
+package com.example.prello.member.controller;
 
+import com.example.prello.member.dto.MemberRequestDto;
+import com.example.prello.member.dto.MemberResponseDto;
+import com.example.prello.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

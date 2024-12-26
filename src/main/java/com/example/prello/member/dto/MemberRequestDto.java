@@ -1,5 +1,6 @@
-package com.example.prello.member;
+package com.example.prello.member.dto;
 
+import com.example.prello.member.auth.MemberAuth;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;

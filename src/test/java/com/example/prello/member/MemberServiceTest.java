@@ -1,7 +1,11 @@
 package com.example.prello.member;
 
-import com.example.prello.user.User;
-import com.example.prello.workspace.Workspace;
+import com.example.prello.member.auth.MemberAuth;
+import com.example.prello.member.dto.MemberRequestDto;
+import com.example.prello.member.dto.MemberResponseDto;
+import com.example.prello.member.entity.Member;
+import com.example.prello.member.repository.MemberRepository;
+import com.example.prello.member.service.MemberService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -9,8 +13,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.Optional;

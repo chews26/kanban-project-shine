@@ -1,6 +1,6 @@
-package com.example.prello.member;
+package com.example.prello.member.dto;
 
-import lombok.Builder;
+import com.example.prello.member.auth.MemberAuth;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

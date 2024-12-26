@@ -1,5 +1,10 @@
-package com.example.prello.member;
+package com.example.prello.member.service;
 
+import com.example.prello.member.auth.MemberAuth;
+import com.example.prello.member.repository.MemberRepository;
+import com.example.prello.member.dto.MemberRequestDto;
+import com.example.prello.member.dto.MemberResponseDto;
+import com.example.prello.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

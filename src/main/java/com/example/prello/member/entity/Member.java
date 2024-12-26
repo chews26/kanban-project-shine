@@ -1,14 +1,17 @@
-package com.example.prello.member;
+package com.example.prello.member.entity;
 
 import com.example.prello.common.BaseEntity;
+import com.example.prello.member.auth.MemberAuth;
 import com.example.prello.user.User;
 import com.example.prello.workspace.Workspace;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import org.hibernate.annotations.DynamicInsert;
 
 @Entity
 @Getter
+@Builder
 @Table(name = "`member`")
 @DynamicInsert
 public class Member extends BaseEntity {

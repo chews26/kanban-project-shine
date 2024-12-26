@@ -1,4 +1,4 @@
-package com.example.prello.member;
+package com.example.prello.member.auth;
 
 import lombok.Getter;
 

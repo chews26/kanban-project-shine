@@ -2,10 +2,12 @@ package com.example.prello.workspace.entity;
 
 import com.example.prello.common.BaseEntity;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 
 @Entity
 @Getter
+@Builder
 @Table(name = "`workspace`")
 public class Workspace extends BaseEntity {
     @Id

@@ -22,7 +22,10 @@ public class WorkspaceService {
     // 워크스페이스 생성
     @Transactional
     public WorkspaceResponseDto createWorkspace(@Valid WorkspaceRequestDto workspaceRequestDto) {
-        Workspace workspace = new Workspace(workspaceRequestDto.getTitle(), workspaceRequestDto.getDescription());
+        Workspace workspace = Workspace.builder()
+                .title(workspaceRequestDto.getTitle())
+                .description(workspaceRequestDto.getDescription())
+                .build();
         Workspace createWorkspace = workspaceRepository.save(workspace);
         return WorkspaceResponseDto.toDto(createWorkspace);
     }

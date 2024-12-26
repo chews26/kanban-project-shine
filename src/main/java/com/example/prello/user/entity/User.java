@@ -4,18 +4,20 @@ import com.example.prello.common.BaseEntity;
 import com.example.prello.user.dto.SignUpRequestDto;
 import com.example.prello.user.enums.Auth;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@NoArgsConstructor
 @Entity
 @Getter
 @Table(name = "`user`")
+@Builder
 public class User extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
 
     @Column(nullable = false, unique = true)
@@ -32,13 +34,7 @@ public class User extends BaseEntity {
 
     private LocalDateTime deletedAt;
 
-    public User(SignUpRequestDto requestDto) {
-        this.email = requestDto.getEmail();
-        this.name = requestDto.getName();
-        this.password = requestDto.getPassword();
-        this.auth = requestDto.getAuth();
-        this.deletedAt = null;
-    }
+    public User() {}
 
     public User(String email, String name, String password, Auth auth) {
         this.email = email;
@@ -48,7 +44,7 @@ public class User extends BaseEntity {
         this.deletedAt = null;
     }
 
-    public void deleteSoftly(LocalDateTime deletedAt) {
-        this.deletedAt = deletedAt;
+    public void deleteSoftly() {
+        this.deletedAt = LocalDateTime.now();
     }
 }

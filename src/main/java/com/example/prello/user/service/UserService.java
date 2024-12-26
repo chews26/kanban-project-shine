@@ -1,5 +1,6 @@
 package com.example.prello.user.service;
 
+import com.example.prello.user.dto.DeleteRequestDto;
 import com.example.prello.user.dto.LoginRequestDto;
 import com.example.prello.user.dto.SignUpRequestDto;
 import com.example.prello.user.dto.UserResponseDto;
@@ -34,26 +35,32 @@ public class UserService {
 
         User user = new User(requestDto.getEmail(), requestDto.getName(), encodedPassword, requestDto.getAuth());
         User savedUser = userRepository.save(user);
-        return new UserResponseDto(savedUser);
+        return UserResponseDto.toDto(savedUser);
     }
 
-    public void login(LoginRequestDto requestDto) {
-        User findUser = userRepository.findByEmailOrElseThrow(requestDto.getEmail());
+    public User login(LoginRequestDto requestDto) {
+        User findUser = userRepository.findByEmail(requestDto.getEmail())
+                .orElseThrow(()-> new IllegalArgumentException(UserErrorCode.NOT_FOUND_USER.getMessage()));
+
         if(findUser.getDeletedAt()!=null) {
             throw new IllegalArgumentException(UserErrorCode.DELETED_ACCOUNT.getMessage());
         }
         if(!PasswordEncoder.matches(requestDto.getPassword(), findUser.getPassword())) {
             throw new IllegalArgumentException(UserErrorCode.INVALID_PASSWORD.getMessage());
         }
+
+        return findUser;
     }
 
-    public void delete(String email, String password) {
-        User findUser = userRepository.findByEmailOrElseThrow(email);
+    public void delete(Long userId, DeleteRequestDto requestDto) {
+        User findUser = userRepository.findById(userId)
+                .orElseThrow(()-> new IllegalArgumentException(UserErrorCode.NOT_FOUND_USER.getMessage()));
 
-        if(!PasswordEncoder.matches(password, findUser.getPassword())){
+        if(!PasswordEncoder.matches(requestDto.getPassword(), findUser.getPassword())){
             throw new IllegalArgumentException(UserErrorCode.INVALID_PASSWORD.getMessage());
         }
 
-        findUser.deleteSoftly(LocalDateTime.now());
+        findUser.deleteSoftly();
+        userRepository.save(findUser);
     }
 }

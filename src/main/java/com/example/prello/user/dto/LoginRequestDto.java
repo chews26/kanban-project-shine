@@ -1,16 +1,20 @@
 package com.example.prello.user.dto;
 
+import com.example.prello.user.entity.User;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Getter
+@RequiredArgsConstructor
 public class LoginRequestDto {
 
-    private String email;
-    private String password;
+    @NotBlank(message = "이메일 아이디는 필수입니다.")
+    @Email(message = "이메일 주소 형식을 확인해주세요.")
+    private final String email;
 
-    public LoginRequestDto(String email, String password) {
-        this.email = email;
-        this.password = password;
-    }
+    @NotBlank(message = "비밀번호는 필수입니다.")
+    private final String password;
+
 }

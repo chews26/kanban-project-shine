@@ -1,5 +1,6 @@
 package com.example.prello.user.controller;
 
+import com.example.prello.user.dto.DeleteRequestDto;
 import com.example.prello.user.dto.LoginRequestDto;
 import com.example.prello.user.dto.UserResponseDto;
 import com.example.prello.user.entity.User;
@@ -26,23 +27,38 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@Valid @RequestBody LoginRequestDto requestDto, HttpServletRequest request) {
-        userService.login(requestDto);
+    public ResponseEntity<String> login(
+            @Valid @RequestBody LoginRequestDto requestDto,
+            HttpServletRequest request
+    ){
+        User loginUser = userService.login(requestDto);
         HttpSession session = request.getSession();
-        session.setAttribute("email", requestDto.getEmail());
+        session.setAttribute("userId", loginUser.getId());
+        session.setAttribute("auth", loginUser.getAuth());
 
         return new ResponseEntity<>("로그인을 성공했습니다.", HttpStatus.OK);
     }
 
+    @GetMapping("/logout")
+    public ResponseEntity<String> logout(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if(session != null) {
+            session.invalidate();
+        }
+        return new ResponseEntity<>("로그아웃을 성공했습니다.", HttpStatus.OK);
+    }
+
     @DeleteMapping("/delete-account")
-    public ResponseEntity<String> delete(@SessionAttribute("email") String email, @RequestBody String password, HttpServletRequest request) {
-        userService.delete(email, password);
+    public ResponseEntity<String> delete(
+            @SessionAttribute("userId") Long userId,
+            @Valid @RequestBody DeleteRequestDto requestDto,
+            HttpServletRequest request
+    ){
+        userService.delete(userId, requestDto);
         HttpSession session = request.getSession(false);
         if (session != null) {
             session.invalidate();
         }
-
         return new ResponseEntity<>("탈퇴가 완료되었습니다.", HttpStatus.OK);
     }
-
 }

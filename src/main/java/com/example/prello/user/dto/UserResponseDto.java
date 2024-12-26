@@ -2,22 +2,27 @@ package com.example.prello.user.dto;
 
 import com.example.prello.user.entity.User;
 import com.example.prello.user.enums.Auth;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+@Builder
 @Getter
 @RequiredArgsConstructor
 public class UserResponseDto {
 
-    private Long userId;
-    private String email;
-    private String name;
-    private Auth auth;
+    private final Long userId;
+    private final String email;
+    private final String name;
+    private final Auth auth;
 
-    public UserResponseDto(User user) {
-        this.userId = user.getId();
-        this.name = user.getName();
-        this.email = user.getEmail();
-        this.auth = user.getAuth();
+    public static UserResponseDto toDto(User user) {
+        return UserResponseDto.builder()
+                .userId(user.getId())
+                .email(user.getEmail())
+                .name(user.getName())
+                .auth(user.getAuth())
+                .build();
     }
+
 }

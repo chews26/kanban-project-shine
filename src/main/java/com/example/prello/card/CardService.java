@@ -2,6 +2,7 @@ package com.example.prello.card;
 
 import com.example.prello.comment.Comment;
 import com.example.prello.list.List;
+import com.example.prello.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -29,7 +30,7 @@ public class CardService {
         List findList = new List();
 
         // TODO - 회의: 서비스 방식
-        if(dto.getEndAt().isBefore(LocalDateTime.now())) {
+        if (dto.getEndAt().isBefore(LocalDateTime.now())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "마감일은 현재 시간 이전일 수 없습니다.");
         }
 
@@ -43,7 +44,7 @@ public class CardService {
      * 카드 (부분) 수정 서비스 메서드
      *
      * @param cardId 카드 식별자
-     * @param dto nullable
+     * @param dto    nullable
      * @return 수정한 Card 내용의 CardResponseDto
      */
     @Transactional
@@ -77,11 +78,29 @@ public class CardService {
      *
      * @param id 카드 식별자
      */
+    @Transactional
     public void deleteCard(Long workspaceId, Long boardId, Long listId, Long id) {
         checkPathVariable(workspaceId, boardId, listId);
         Card findCard = findCardById(id);
 
         // TODO - 회의: 논리 삭제?
+    }
+
+    /**
+     * 카드 담당자 추가 서비스 메서드
+     *
+     * @param id 카드 식별자
+     */
+    @Transactional
+    public void updateAssignees(Long workspaceId, Long boardId, Long listId, Long id, CardAssigneesRequestDto dto) {
+        checkPathVariable(workspaceId, boardId, listId);
+        Card findCard = findCardById(id);
+
+        // TODO: 유의미한 User 로 변경
+        // userService.findUserByIdOrElseThrow(dto.getUserId());
+        User user = new User();
+
+        findCard.addAssignees(user);
     }
 
     /**

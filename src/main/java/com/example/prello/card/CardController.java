@@ -56,10 +56,30 @@ public class CardController {
     }
 
     /**
+     * 카드 담당자 추가
+     *
+     * @param id  카드 식별자
+     * @param dto 담당자 id 포함 request dto
+     * @return 200 OK
+     */
+    @PatchMapping("/{id}")
+    public ResponseEntity<String> updateAssignees(
+            @PathVariable Long workspaceId,
+            @PathVariable Long boardId,
+            @PathVariable Long listId,
+            @PathVariable Long id,
+            @Valid @RequestBody CardAssigneesRequestDto dto
+    ) {
+
+        cardService.updateAssignees(workspaceId, boardId, listId, id, dto);
+        return ResponseEntity.ok("담당자가 추가되었습니다.");
+    }
+
+    /**
      * 카드 상세 조회
      *
      * @param id 카드 식별자
-     * @return 댓글 포함한 카드 정보 dto
+     * @return 200 OK
      */
     @GetMapping("/{id}")
     public ResponseEntity<CardDetailResponseDto> findCard(
@@ -77,7 +97,7 @@ public class CardController {
      * 카드 삭제
      *
      * @param id 카드 식별자
-     * @return 삭제 확인 문장
+     * @return 200 OK
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteCard(

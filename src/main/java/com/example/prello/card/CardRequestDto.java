@@ -3,12 +3,10 @@ package com.example.prello.card;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Getter
-@NoArgsConstructor
 public class CardRequestDto {
 
     @NotEmpty
@@ -18,5 +16,4 @@ public class CardRequestDto {
 
     @NotNull
     private LocalDateTime endAt;
-
 }

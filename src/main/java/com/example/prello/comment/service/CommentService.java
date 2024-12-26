@@ -1,5 +1,6 @@
-package com.example.prello.comment;
+package com.example.prello.comment.service;
 
+import com.example.prello.comment.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

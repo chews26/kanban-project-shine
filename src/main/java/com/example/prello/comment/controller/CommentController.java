@@ -1,5 +1,6 @@
-package com.example.prello.comment;
+package com.example.prello.comment.controller;
 
+import com.example.prello.comment.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 

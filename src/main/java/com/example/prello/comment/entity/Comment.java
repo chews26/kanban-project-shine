@@ -1,4 +1,4 @@
-package com.example.prello.comment;
+package com.example.prello.comment.entity;
 
 import com.example.prello.common.BaseEntity;
 import jakarta.persistence.*;

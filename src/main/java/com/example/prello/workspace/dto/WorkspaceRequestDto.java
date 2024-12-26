@@ -1,12 +1,12 @@
-package com.example.prello.workspace;
+package com.example.prello.workspace.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class WorkspaceRequestDto {
 
     @NotBlank(message = "제목을 비워둘 수 없습니다.")

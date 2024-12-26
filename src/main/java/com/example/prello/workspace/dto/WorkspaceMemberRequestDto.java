@@ -1,13 +1,13 @@
-package com.example.prello.workspace;
+package com.example.prello.workspace.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class WorkspaceMemberRequestDto {
 
     @NotBlank(message = "이메일은 필수 입니다.")

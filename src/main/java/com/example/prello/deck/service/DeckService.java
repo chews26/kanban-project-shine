@@ -1,11 +1,11 @@
-package com.example.prello.list.service;
+package com.example.prello.deck.service;
 
 import com.example.prello.board.Board;
 import com.example.prello.board.BoardService;
-import com.example.prello.list.repository.DeckRepository;
-import com.example.prello.list.dto.DeckRequestDto;
-import com.example.prello.list.dto.DeckResponseDto;
-import com.example.prello.list.entity.Deck;
+import com.example.prello.deck.repository.DeckRepository;
+import com.example.prello.deck.dto.DeckRequestDto;
+import com.example.prello.deck.dto.DeckResponseDto;
+import com.example.prello.deck.entity.Deck;
 import com.example.prello.workspace.WorkspaceService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

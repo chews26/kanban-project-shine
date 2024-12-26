@@ -1,4 +1,4 @@
-package com.example.prello.list.entity;
+package com.example.prello.deck.entity;
 
 import com.example.prello.board.Board;
 import com.example.prello.common.BaseEntity;

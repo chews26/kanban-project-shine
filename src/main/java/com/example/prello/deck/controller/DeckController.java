@@ -1,8 +1,8 @@
-package com.example.prello.list.controller;
+package com.example.prello.deck.controller;
 
-import com.example.prello.list.dto.DeckRequestDto;
-import com.example.prello.list.dto.DeckResponseDto;
-import com.example.prello.list.service.DeckService;
+import com.example.prello.deck.dto.DeckRequestDto;
+import com.example.prello.deck.dto.DeckResponseDto;
+import com.example.prello.deck.service.DeckService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

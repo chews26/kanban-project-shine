@@ -24,5 +24,4 @@ public class UserResponseDto {
                 .auth(user.getAuth())
                 .build();
     }
-
 }

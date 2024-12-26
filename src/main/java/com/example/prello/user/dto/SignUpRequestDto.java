@@ -2,9 +2,7 @@ package com.example.prello.user.dto;
 
 import com.example.prello.user.entity.User;
 import com.example.prello.user.enums.Auth;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -13,7 +11,8 @@ import lombok.RequiredArgsConstructor;
 public class SignUpRequestDto {
 
     @NotBlank(message = "이메일 아이디는 필수입니다.")
-    @Email(message = "이메일 주소 형식을 확인해주세요.")
+    @Size(max = 50, message = "이메일의 최대길이는 50자입니다.")
+    @Pattern(regexp = "^[\\w\\.-]+@[\\w\\.-]+\\.[a-zA-Z]{2,}$", message = "올바르지 않은 이메일 형식입니다.")
     private final String email;
 
     @NotBlank(message = "이름은 필수입니다.")

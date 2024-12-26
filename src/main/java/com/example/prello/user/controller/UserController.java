@@ -21,7 +21,9 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<UserResponseDto> signUp(@Valid @RequestBody SignUpRequestDto reqeustDto) {
+    public ResponseEntity<UserResponseDto> signUp(
+            @Valid @RequestBody SignUpRequestDto reqeustDto
+    ){
         UserResponseDto responseDto = userService.signUp(reqeustDto);
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
@@ -40,7 +42,9 @@ public class UserController {
     }
 
     @GetMapping("/logout")
-    public ResponseEntity<String> logout(HttpServletRequest request) {
+    public ResponseEntity<String> logout(
+            HttpServletRequest request
+    ){
         HttpSession session = request.getSession(false);
         if(session != null) {
             session.invalidate();

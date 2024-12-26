@@ -1,4 +1,4 @@
-package com.example.prello.list;
+package com.example.prello.list.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

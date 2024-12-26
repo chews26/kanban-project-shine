@@ -1,5 +1,6 @@
-package com.example.prello.list;
+package com.example.prello.list.dto;
 
+import com.example.prello.list.entity.Deck;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

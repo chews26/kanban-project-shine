@@ -15,6 +15,7 @@ public class BoardRequestDto {
     private final String title;
 
     @Pattern(regexp = "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$", message = "컬러코드 형식이 맞지 않습니다.")
+    @Size(min = 7, max = 7, message = "색상코드는 7글자입니다.")
     private final String bgColor;
 
     private final String bgImage;

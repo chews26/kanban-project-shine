@@ -22,4 +22,15 @@ public class BoardResponseDto {
     private final LocalDateTime createdAt;
 
     private final LocalDateTime updatedAt;
+
+    public static BoardResponseDto toDto(Board board) {
+        return new BoardResponseDto(
+                board.getId(),
+                board.getTitle(),
+                board.getBg_color(),
+                board.getBg_image(),
+                board.getCreatedAt(),
+                board.getUpdatedAt()
+        );
+    }
 }

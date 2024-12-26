@@ -1,22 +1,27 @@
 package com.example.prello.list;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Getter
+@RequiredArgsConstructor
 public class DeckResponseDto {
 
-    private Long id;
-    private String title;
-    private int order;
-    private LocalDateTime createdAt;
+    private final Long id;
+    private final String title;
+    private final int order;
+    private final LocalDateTime createdAt;
+    private final LocalDateTime updatedAt;
 
-    public DeckResponseDto(Long id, String title, int order, LocalDateTime createdAt) {
-        this.id = id;
-        this.title = title;
-        this.order = order;
-        this.createdAt = createdAt;
+    public static DeckResponseDto toDto(Deck deck) {
+        return new DeckResponseDto(
+                deck.getId(),
+                deck.getTitle(),
+                deck.getOrder(),
+                deck.getCreatedAt(),
+                deck.getUpdatedAt()
+        );
     }
-
 }

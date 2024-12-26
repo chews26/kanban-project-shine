@@ -3,11 +3,12 @@ package com.example.prello.list;
 import com.example.prello.board.Board;
 import com.example.prello.common.BaseEntity;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 
 @Entity
 @Getter
-@Table(name = "`boardlist`")
+@Table(name = "`Deck`")
 public class Deck extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,9 +26,24 @@ public class Deck extends BaseEntity {
 
     public Deck() {}
 
+    @Builder
     public Deck(String title, int order, Board board) {
         this.title = title;
         this.order = order;
         this.board = board;
+    }
+
+    //제목 업데이트
+    public void updateDeckTitle(String title) {
+        if(title != null) {
+            this.title = title;
+        }
+    }
+
+    //순서 업데이트
+    public void updateDeckOrder(int order) {
+        if(order >= 0) {
+            this.order = order;
+        }
     }
 }

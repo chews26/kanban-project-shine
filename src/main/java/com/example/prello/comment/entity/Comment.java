@@ -1,19 +1,24 @@
 package com.example.prello.comment.entity;
 
-import com.example.prello.card.Card;
+import com.example.prello.card.entity.Card;
 import com.example.prello.common.BaseEntity;
-import com.example.prello.user.User;
+
+import com.example.prello.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 
 @Entity
 @Getter
+@Builder
 @Table(name = "`comment`")
 public class Comment extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
+    private String name;
 
     @Column(nullable = false)
     private String content;
@@ -28,10 +33,16 @@ public class Comment extends BaseEntity {
 
     public Comment() {}
 
-    @Builder
-    public Comment(String content, User user, Card card) {
+    public Comment(String name, String content, User user, Card card) {
+        this.name = name;
         this.content = content;
         this.user = user;
         this.card = card;
+    }
+
+    public Comment updateComment(String content) {
+        if(comment != null) {
+            this.content = content;
+        }
     }
 }

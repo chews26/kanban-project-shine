@@ -1,4 +1,4 @@
-package com.example.prello.attachment;
+package com.example.prello.attachment.dto;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

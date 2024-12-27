@@ -1,5 +1,6 @@
 package com.example.prello.attachment;
 
+import com.example.prello.attachment.entity.Attachment;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,7 +34,8 @@ public class FileStore {
         multipartFile.transferTo(new File(fileUrl));
 
         return Attachment.builder()
-                .fileName(originalFilename)
+                .uploadFileName(originalFilename)
+                .storeFileName(storeFileName)
                 .fileUrl(fileUrl)
                 .fileType(findExt(originalFilename))
                 .build();

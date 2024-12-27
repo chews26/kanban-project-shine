@@ -1,4 +1,4 @@
-package com.example.prello.attachment;
+package com.example.prello.attachment.entity;
 
 import com.example.prello.card.entity.Card;
 import com.example.prello.common.BaseEntity;
@@ -23,7 +23,9 @@ public class Attachment extends BaseEntity {
     @JoinColumn(name = "card_id")
     private Card card;
 
-    private String fileName;
+    private String uploadFileName;
+
+    private String storeFileName;
 
     private String fileUrl;
 
@@ -34,8 +36,9 @@ public class Attachment extends BaseEntity {
     public Attachment() {
     }
 
-    public Attachment(String fileName, String fileUrl, String fileType) {
-        this.fileName = fileName;
+    public Attachment(String uploadFileName, String storeFileName, String fileUrl, String fileType) {
+        this.uploadFileName = uploadFileName;
+        this.storeFileName = storeFileName;
         this.fileUrl = fileUrl;
         this.fileType = fileType;
     }

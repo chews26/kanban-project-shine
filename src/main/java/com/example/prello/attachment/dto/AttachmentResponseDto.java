@@ -1,5 +1,6 @@
-package com.example.prello.attachment;
+package com.example.prello.attachment.dto;
 
+import com.example.prello.attachment.entity.Attachment;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -14,7 +15,7 @@ public class AttachmentResponseDto {
     public static AttachmentResponseDto toDto(Attachment attachment) {
         return new AttachmentResponseDto(
                 attachment.getId(),
-                attachment.getFileName()
+                attachment.getUploadFileName()
         );
     }
 }

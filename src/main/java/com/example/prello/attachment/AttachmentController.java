@@ -4,10 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,12 +19,14 @@ public class AttachmentController {
      * @param form 첨부 파일 폼
      * @return 201 CREATED
      */
-    @PostMapping
+    @PostMapping("/{cardId}")
     public ResponseEntity<AttachmentResponseDto> createAttachment(
-            @Valid @ModelAttribute AttachmentForm form
+            @Valid @ModelAttribute AttachmentForm form,
+            @PathVariable Long cardId
     ) {
 
         AttachmentResponseDto attachmentResponseDto = attachmentService.createAttachment(form);
+        attachmentService.addAttachmentToCard(cardId, attachmentResponseDto.getId());
         return new ResponseEntity<>(attachmentResponseDto, HttpStatus.CREATED);
     }
 }

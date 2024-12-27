@@ -5,27 +5,96 @@ import com.example.prello.member.repository.MemberRepository;
 import com.example.prello.member.dto.MemberRequestDto;
 import com.example.prello.member.dto.MemberResponseDto;
 import com.example.prello.member.entity.Member;
+import com.example.prello.user.entity.User;
+import com.example.prello.user.service.UserService;
+import com.example.prello.workspace.entity.Workspace;
+import com.example.prello.workspace.service.WorkspaceService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final WorkspaceService workspaceService;
+    private final UserService userService;
 
-    // todo 멤버 권한 변경
-    // todo return값 변경 필요
+
+    // 멤버권한 변경
+    // todo 세션에서 유저정보 확인 후 권한 체크 필요
+    // todo 인증 인가 로직 수정 필요 (세션 사용필요)
     @Transactional
-    public MemberResponseDto updateMemberAuth(Long memberId, MemberRequestDto memberRequestDto) throws IllegalAccessException {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 멤버를 찾을 수 없습니다. ID: " + memberId));
+    public MemberResponseDto updateMemberAuth(Long workspaceId, Long id, MemberRequestDto memberRequestDto) throws IllegalAccessException {
+        Workspace workspace = workspaceService.findByIdOrElseThrow(workspaceId);
+
+        MemberAuth workspaceAuth = memberRepository.findMemberAuthByUserIdAndWorkspaceId(id, workspaceId)
+                .orElseThrow(() -> new IllegalAccessException("권한이 없습니다."));
+
+        if (workspaceAuth != MemberAuth.WORKSPACE) {
+            throw new IllegalAccessException("권한이 없습니다. 워크스페이스 권한이 필요합니다.");
+        }
+
+        Member member = findByIdWithUserOrElseThrow(id);
 
         MemberAuth currentAuth = member.getAuth();
 
-        member.updateMemberAuth(memberRequestDto.getMemberAuth());
+        member.updateMemberAuth(memberRequestDto.getAuth());
 
         return MemberResponseDto.toDto(member);
+    }
+
+    // 워크스페이스 멤버 추가
+    // todo 세션에서 유저정보 확인 후 권한 체크 필요
+    @Transactional
+    public String addWorkspaceMember(Long workspaceId, @Valid MemberRequestDto memberRequestDto) {
+        Workspace workspace = workspaceService.findByIdOrElseThrow(workspaceId);
+        User user = userService.findUserByEmailOrElseThrow(memberRequestDto.getEmail());
+
+        boolean isAlreadyMember = memberRepository.existsByUserIdAndWorkspaceId(user.getId(), workspaceId);
+        if (isAlreadyMember) {
+            throw new IllegalStateException("이미 워크스페이스의 멤버입니다.");
+        }
+
+        Member member = Member.builder()
+                .workspace(workspace)
+                .user(user)
+                .auth(memberRequestDto.getAuth())
+                .build();
+
+        memberRepository.save(member);
+
+        return "멤버가 추가되었습니다." + user.getEmail();
+    }
+
+    // 워크스페이스 멤버 조회
+    // todo 세션에서 유저정보 확인 후 권한 체크 필요
+    public List<MemberResponseDto> getWorkspaceMembers(Long workspaceId) {
+        Workspace workspace = workspaceService.findByIdOrElseThrow(workspaceId);
+
+        List<Member> workspaceMember = getMembersByWorkspaceId(workspaceId);
+        return workspaceMember.stream()
+                .map(MemberResponseDto::toDto)
+                .toList();
+    }
+
+    // member id 확인
+    public Member findMemberByIdOrElseThrow(Long id) {
+        return memberRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException());
+    }
+
+    // member id, user id 함께 확인 (fetch Join)
+    private Member findByIdWithUserOrElseThrow(Long id) {
+        return memberRepository.findByMemberIdWithUser(id)
+                .orElseThrow(() -> new IllegalArgumentException());
+    }
+
+    private List<Member> getMembersByWorkspaceId(Long workspaceId) {
+        return memberRepository.findByWorkspaceId(workspaceId);
     }
 }

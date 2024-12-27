@@ -7,12 +7,12 @@ import com.example.prello.user.dto.UserResponseDto;
 import com.example.prello.user.entity.User;
 import com.example.prello.user.enums.UserErrorCode;
 import com.example.prello.user.repository.UserRepository;
-import com.example.prello.user.security.PasswordEncoder;
+import com.example.prello.common.PasswordEncoder;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.security.InvalidParameterException;
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -53,8 +53,7 @@ public class UserService {
     }
 
     public void delete(Long userId, DeleteRequestDto requestDto) {
-        User findUser = userRepository.findById(userId)
-                .orElseThrow(()-> new IllegalArgumentException(UserErrorCode.NOT_FOUND_USER.getMessage()));
+        User findUser = findByIdOrElseThrow(userId);
 
         if(!PasswordEncoder.matches(requestDto.getPassword(), findUser.getPassword())){
             throw new IllegalArgumentException(UserErrorCode.INVALID_PASSWORD.getMessage());
@@ -62,5 +61,15 @@ public class UserService {
 
         findUser.deleteSoftly();
         userRepository.save(findUser);
+    }
+
+    public User findByIdOrElseThrow(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    public User findUserByEmailOrElseThrow(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("해당 이메일로 사용자를 찾을 수 없습니다: " + email));
     }
 }

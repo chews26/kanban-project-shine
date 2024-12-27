@@ -22,8 +22,8 @@ public class MemberResponseDto {
     public static MemberResponseDto toDto(Member member) {
         return MemberResponseDto.builder()
                 .id(member.getId())
-//                .name(member.getUser().getName()) // 예: Member에서 User의 name 가져오기
-//                .email(member.getUser().getEmail()) // 예: Member에서 User의 email 가져오기
+                .name(member.getUser().getName()) // 예: Member에서 User의 name 가져오기
+                .email(member.getUser().getEmail())
                 .memberAuth(member.getAuth())
                 .build();
     }

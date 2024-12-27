@@ -1,7 +1,7 @@
 package com.example.prello.card.dto;
 
 import com.example.prello.card.entity.Card;
-import com.example.prello.comment.Comment;
+import com.example.prello.comment.entity.Comment;
 import lombok.Getter;
 
 import java.util.List;

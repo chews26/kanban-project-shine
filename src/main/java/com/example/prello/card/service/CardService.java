@@ -6,7 +6,7 @@ import com.example.prello.card.dto.CardRequestDto;
 import com.example.prello.card.dto.CardResponseDto;
 import com.example.prello.card.entity.Card;
 import com.example.prello.card.repository.CardRepository;
-import com.example.prello.comment.Comment;
+import com.example.prello.comment.entity.Comment;
 import com.example.prello.deck.entity.Deck;
 import com.example.prello.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,7 +62,7 @@ public class CardService {
     @Transactional
     public CardResponseDto updateCard(Long workspaceId, Long boardId, Long deckId, Long cardId, CardRequestDto dto) {
         checkPathVariable(workspaceId, boardId, deckId);
-        Card findCard = findCardByIdOrElseThrow(cardId);
+        Card findCard = findByIdOrElseThrow(cardId);
         findCard.updateCard(dto.getTitle(), dto.getDescription(), dto.getEndAt());
 
         return CardResponseDto.toDto(findCard);
@@ -77,7 +76,7 @@ public class CardService {
      */
     public CardDetailResponseDto findCard(Long workspaceId, Long boardId, Long deckId, Long id) {
         checkPathVariable(workspaceId, boardId, deckId);
-        Card findCard = findCardByIdOrElseThrow(id);
+        Card findCard = findByIdOrElseThrow(id);
 
         // TODO: 댓글 찾기
         List<Comment> comments = new ArrayList<>();
@@ -93,7 +92,7 @@ public class CardService {
     @Transactional
     public void deleteCard(Long workspaceId, Long boardId, Long deckId, Long id) {
         checkPathVariable(workspaceId, boardId, deckId);
-        Card findCard = findCardByIdOrElseThrow(id);
+        Card findCard = findByIdOrElseThrow(id);
 
         // TODO - 회의: 논리 삭제?
     }
@@ -106,7 +105,7 @@ public class CardService {
     @Transactional
     public void updateAssignees(Long workspaceId, Long boardId, Long deckId, Long id, CardAssigneesRequestDto dto) {
         checkPathVariable(workspaceId, boardId, deckId);
-        Card findCard = findCardByIdOrElseThrow(id);
+        Card findCard = findByIdOrElseThrow(id);
 
         // TODO: 유의미한 User 로 변경
         // userService.findUserByIdOrElseThrow(dto.getUserId());
@@ -121,7 +120,7 @@ public class CardService {
      * @param id 카드 식별자
      * @return id에 해당하는 Card
      */
-    public Card findCardByIdOrElseThrow(Long id) {
+    public Card findByIdOrElseThrow(Long id) {
         return cardRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }

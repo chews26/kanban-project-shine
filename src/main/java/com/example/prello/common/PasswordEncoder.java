@@ -1,4 +1,4 @@
-package com.example.prello.user.security;
+package com.example.prello.common;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 

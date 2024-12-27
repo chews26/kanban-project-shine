@@ -1,7 +1,5 @@
 package com.example.prello.workspace.service;
 
-import com.example.prello.workspace.dto.WorkspaceMemberRequestDto;
-import com.example.prello.workspace.dto.WorkspaceMemberResponseDto;
 import com.example.prello.workspace.dto.WorkspaceRequestDto;
 import com.example.prello.workspace.dto.WorkspaceResponseDto;
 import com.example.prello.workspace.entity.Workspace;
@@ -60,20 +58,6 @@ public class WorkspaceService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 워크스페이스가 존재하지 않습니다."));
         workspaceRepository.delete(workspace);
         return "워크스페이스가 삭제되었습니다";
-    }
-
-    // 워크스페이스 멤버 추가
-    // todo member 서비스와 연관관계 설정 필요
-    public String addWorkspaceMember(Long id, @Valid WorkspaceMemberRequestDto workspaceMemberRequestDto) {
-        Workspace workspace = workspaceRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 워크스페이스가 존재하지 않습니다."));
-        return null;
-    }
-
-    // 워크스페이스 멤버 조회
-    // todo member 서비스와 연관관계 설정 필요
-    public List<WorkspaceMemberResponseDto> getWorkspaceMembers() {
-        return null;
     }
 
     public Workspace findByIdOrElseThrow(Long id) {

@@ -21,7 +21,6 @@ public class SignUpRequestDto {
     @NotBlank(message = "비밀번호는 필수입니다.")
     private final String password;
 
-    @NotNull(message = "권한은 필수입니다.")
-    private final Auth auth;
+    private final Auth auth = Auth.USER;
 
 }

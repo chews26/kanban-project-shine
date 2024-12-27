@@ -18,14 +18,13 @@ public class DeckController {
 
     //리스트 생성
     @PostMapping
-    public ResponseEntity<DeckResponseDto> createBoardList(
+    public ResponseEntity<DeckResponseDto> createDeck(
         @PathVariable Long workspaceId,
         @PathVariable Long boardId,
         @Valid @RequestBody DeckRequestDto dto) {
 
         DeckResponseDto deckResponseDto = deckService.createDeck(workspaceId, boardId, dto);
         return new ResponseEntity<>(deckResponseDto, HttpStatus.CREATED);
-        //return DeckService.createList(workspaceId, boardId, boardListRequestDto);
     }
 
     //리스트 제목 수정
@@ -46,9 +45,9 @@ public class DeckController {
             @PathVariable Long workspaceId,
             @PathVariable Long boardId,
             @PathVariable Long id,
-            @Valid @RequestBody DeckRequestDto dto){
+            @Valid @RequestBody DeckRequestDto dto) {
 
-            DeckResponseDto deckResponseDto = deckService.updateDexkOrder(workspaceId, boardId, id, dto);
+            DeckResponseDto deckResponseDto = deckService.updateDeckTitle(workspaceId, boardId, id, dto);
             return new ResponseEntity<>(deckResponseDto, HttpStatus.OK);
     }
     //리스트 삭제
@@ -56,7 +55,7 @@ public class DeckController {
     public ResponseEntity<DeckResponseDto> deleteDeck(
             @PathVariable Long workspaceId,
             @PathVariable Long boardId,
-            @PathVariable Long id){
+            @PathVariable Long id) {
 
             deckService.deleteDeck(workspaceId, boardId, id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

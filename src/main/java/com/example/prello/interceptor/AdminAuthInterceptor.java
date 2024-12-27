@@ -1,6 +1,5 @@
 package com.example.prello.interceptor;
 
-import com.example.prello.user.dto.AuthenticationDto;
 import com.example.prello.user.enums.Auth;
 import com.example.prello.common.SessionName;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,17 +18,9 @@ public class AdminAuthInterceptor implements HandlerInterceptor {
 
         HttpSession session = request.getSession(false);
 
-        if (session == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인이 필요합니다.");
-        }
+        Auth auth = (Auth) session.getAttribute(SessionName.USER_AUTH);
 
-        AuthenticationDto auth = (AuthenticationDto) session.getAttribute(SessionName.USER_AUTH);
-
-        if (auth == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인이 필요합니다.");
-        }
-
-        if (auth.getAuth() != Auth.ADMIN) {
+        if (auth != Auth.ADMIN) {
             throw new ResponseStatusException(
                     HttpStatus.UNAUTHORIZED, " ADMIN 권한이 필요합니다."
             );

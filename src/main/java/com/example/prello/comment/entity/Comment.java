@@ -10,7 +10,7 @@ import lombok.Getter;
 
 @Entity
 @Getter
-@Builder
+@Builder(builderClassName = "Builder")
 @Table(name = "`comment`")
 public class Comment extends BaseEntity {
     @Id

@@ -12,7 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.IOException;
 
 @Slf4j
-public class AuthenticationFilter implements Filter {
+public class LoginFilter implements Filter {
     private static final String[] WHITE_LIST = {"/api/signup", "/api/login"};
 
     @Override

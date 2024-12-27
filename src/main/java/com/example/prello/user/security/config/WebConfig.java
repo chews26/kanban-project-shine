@@ -1,8 +1,7 @@
 package com.example.prello.user.security.config;
 
-import com.example.prello.user.enums.Auth;
-import com.example.prello.user.security.filter.AuthenticationFilter;
-import com.example.prello.user.security.interceptor.AuthorizationInterceptor;
+import com.example.prello.user.security.filter.LoginFilter;
+import com.example.prello.user.security.interceptor.AdminAuthInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -17,26 +16,23 @@ public class WebConfig implements WebMvcConfigurer {
 
     private static final String[] ADMIN_REQUIRED_PATHS = {"/api/workspaces", "/api/workspaces/*/members/*"};
 
+    private final AdminAuthInterceptor adminAuthInterceptor;
+
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        // 관리자 권한이 필요한 경로에 대한 인터셉터
-        registry.addInterceptor(new AuthorizationInterceptor(Auth.ADMIN))
+
+        registry.addInterceptor(adminAuthInterceptor)
                 .addPathPatterns(ADMIN_REQUIRED_PATHS)
                 .order(Ordered.HIGHEST_PRECEDENCE + 1);
     }
 
     @Bean
-    public FilterRegistrationBean<AuthenticationFilter> authenticationFilter() {
-        FilterRegistrationBean<AuthenticationFilter> filterRegistrationBean = new FilterRegistrationBean<>();
-        filterRegistrationBean.setFilter(new AuthenticationFilter());
+    public FilterRegistrationBean<LoginFilter> authenticationFilter() {
+        FilterRegistrationBean<LoginFilter> filterRegistrationBean = new FilterRegistrationBean<>();
+        filterRegistrationBean.setFilter(new LoginFilter());
         filterRegistrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE);
         filterRegistrationBean.addUrlPatterns("/api/*");
         return filterRegistrationBean;
     }
-
-    @Bean
-    public AuthorizationInterceptor adminAuthorizationInterceptor() {
-        return new AuthorizationInterceptor(Auth.ADMIN);
-    }
-
 }

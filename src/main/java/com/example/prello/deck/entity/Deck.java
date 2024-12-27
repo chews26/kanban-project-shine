@@ -1,6 +1,6 @@
 package com.example.prello.deck.entity;
 
-import com.example.prello.board.Board;
+import com.example.prello.board.entity.Board;
 import com.example.prello.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

@@ -1,5 +1,9 @@
-package com.example.prello.board;
+package com.example.prello.board.service;
 
+import com.example.prello.board.dto.BoardRequestDto;
+import com.example.prello.board.dto.BoardResponseDto;
+import com.example.prello.board.entity.Board;
+import com.example.prello.board.repository.BoardRepository;
 import com.example.prello.workspace.service.WorkspaceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,6 @@
 package com.example.prello.comment.service;
 
-import com.example.prello.board.BoardService;
+import com.example.prello.board.service.BoardService;
 import com.example.prello.card.entity.Card;
 import com.example.prello.card.service.CardService;
 import com.example.prello.comment.dto.CommentRequestDto;

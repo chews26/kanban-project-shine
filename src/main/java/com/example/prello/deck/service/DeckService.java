@@ -1,7 +1,7 @@
 package com.example.prello.deck.service;
 
-import com.example.prello.board.Board;
-import com.example.prello.board.BoardService;
+import com.example.prello.board.entity.Board;
+import com.example.prello.board.service.BoardService;
 import com.example.prello.deck.repository.DeckRepository;
 import com.example.prello.deck.dto.DeckRequestDto;
 import com.example.prello.deck.dto.DeckResponseDto;

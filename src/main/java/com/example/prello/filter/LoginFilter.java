@@ -25,7 +25,7 @@ public class LoginFilter implements Filter {
 
         if (!PatternMatchUtils.simpleMatch(WHITE_LIST, requestURI)) {
             HttpSession session = httpRequest.getSession(false);
-            if (session == null || session.getAttribute(SessionName.USER_AUTH) == null) {
+            if (session == null || session.getAttribute(SessionName.USER_ID) == null) {
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인이 필요합니다.");
             }
         }

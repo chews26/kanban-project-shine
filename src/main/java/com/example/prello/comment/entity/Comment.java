@@ -8,6 +8,8 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 
+import static com.example.prello.comment.entity.QComment.comment;
+
 @Entity
 @Getter
 @Builder(builderClassName = "Builder")
@@ -33,7 +35,8 @@ public class Comment extends BaseEntity {
 
     public Comment() {}
 
-    public Comment(String name, String content, User user, Card card) {
+    public Comment(Long id, String name, String content, User user, Card card) {
+        this.id = id;
         this.name = name;
         this.content = content;
         this.user = user;
@@ -44,5 +47,6 @@ public class Comment extends BaseEntity {
         if(comment != null) {
             this.content = content;
         }
+        return this;
     }
 }

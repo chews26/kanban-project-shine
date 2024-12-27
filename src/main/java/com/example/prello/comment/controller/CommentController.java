@@ -53,7 +53,7 @@ public class CommentController {
             @PathVariable Long id,
             @Valid @RequestBody CommentRequestDto dto) {
 
-           CommentResponseDto commentResponseDto = commentService.deleteComment(workspaceId, boardId, listId, cardId, id, dto);
-            return new ResponseEntity<>(commentResponseDto, HttpStatus.NO_CONTENT);
+            commentService.deleteComment(workspaceId, boardId, listId, cardId, id, dto);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

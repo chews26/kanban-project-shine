@@ -8,6 +8,6 @@ import lombok.Getter;
 public class CommentRequestDto {
 
     @NotBlank(message = "내용을 입력하세요")
-    @Size(max = 255, message = "255자 이내로 작서앻야 합니다.")
+    @Size(max = 255, message = "255자 이내로 작성해야 합니다.")
     private String content;
 }

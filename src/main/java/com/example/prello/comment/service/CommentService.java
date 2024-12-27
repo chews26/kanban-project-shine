@@ -1,6 +1,5 @@
 package com.example.prello.comment.service;
 
-import com.example.prello.board.Board;
 import com.example.prello.board.BoardService;
 import com.example.prello.card.entity.Card;
 import com.example.prello.card.service.CardService;
@@ -8,16 +7,11 @@ import com.example.prello.comment.dto.CommentRequestDto;
 import com.example.prello.comment.dto.CommentResponseDto;
 import com.example.prello.comment.entity.Comment;
 import com.example.prello.comment.repository.CommentRepository;
-import com.example.prello.deck.entity.Deck;
 import com.example.prello.deck.service.DeckService;
-import com.example.prello.user.service.UserService;
 import com.example.prello.workspace.service.WorkspaceService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import static com.example.prello.user.entity.QUser.user;
 
 @Service
 @RequiredArgsConstructor
@@ -51,7 +45,7 @@ public class CommentService {
     public CommentResponseDto updateComment(Long workspaceId, Long boardId, Long listId, Long cardId, Long id, CommentRequestDto dto) {
         checkPathVariableIds(workspaceId, boardId, listId, cardId);
 
-        Comment findComment = findCommentByIdOrElseThrow(id);
+        Comment findComment = findByIdOrElseThrow(id);
         findComment.updateComment(dto.getContent());
 
         return CommentResponseDto.toDto(findComment);
@@ -60,15 +54,15 @@ public class CommentService {
 
     //댓글 삭제
     @Transactional
-    public CommentResponseDto deleteComment(Long workspaceId, Long boardId, Long listId, Long cardId, Long id, CommentRequestDto dto) {
+    public void deleteComment(Long workspaceId, Long boardId, Long listId, Long cardId, Long id, CommentRequestDto dto) {
         checkPathVariableIds(workspaceId, boardId, listId, cardId);
-        Comment findComment = findCommentByIdOrElseThrow(id);
+        Comment findComment = findByIdOrElseThrow(id);
 
         commentRepository.delete(findComment);
     }
 
     //댓글 id로 조회
-    public Comment findCommentByIdOrElseThrow(Long id) {
+    public Comment findByIdOrElseThrow(Long id) {
         return commentRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("리스트를 찾을 수 없습니다."));
     }
@@ -84,7 +78,7 @@ public class CommentService {
         //deck 검증
         deckService.findByIdOrElseThrow(deckId);
 
-        //board 검증
+        //card 검증
         return cardService.findByIdOrElseThrow(cardId);
     }
 }

@@ -8,6 +8,7 @@ import lombok.Getter;
 
 @Entity
 @Getter
+@Builder(builderClassName = "Builder")
 @Table(name = "`deck`")
 public class Deck extends BaseEntity {
     @Id
@@ -26,7 +27,6 @@ public class Deck extends BaseEntity {
 
     public Deck() {}
 
-    @Builder
     public Deck(String title, int order, Board board) {
         this.title = title;
         this.order = order;

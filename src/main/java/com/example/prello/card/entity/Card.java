@@ -38,12 +38,12 @@ public class Card extends BaseEntity {
 
     public Card(){}
 
-    public Card(Deck deck, String title, String description, LocalDateTime endAt) {
-        this.deck = deck;
-        this.title = title;
-        this.description = description;
-        this.endAt = endAt;
-    }
+//    public Card(Deck deck, String title, String description, LocalDateTime endAt) {
+//        this.deck = deck;
+//        this.title = title;
+//        this.description = description;
+//        this.endAt = endAt;
+//    }
 
     /**
      * 담당자 추가

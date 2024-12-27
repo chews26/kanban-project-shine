@@ -1,5 +1,6 @@
 package com.example.prello.user.controller;
 
+import com.example.prello.common.SessionName;
 import com.example.prello.user.dto.DeleteRequestDto;
 import com.example.prello.user.dto.LoginRequestDto;
 import com.example.prello.user.dto.UserResponseDto;
@@ -14,8 +15,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController("/api")
+@RestController
 @RequiredArgsConstructor
+@RequestMapping("/api")
 public class UserController {
 
     private final UserService userService;
@@ -35,8 +37,8 @@ public class UserController {
     ){
         User loginUser = userService.login(requestDto);
         HttpSession session = request.getSession();
-        session.setAttribute("userId", loginUser.getId());
-        session.setAttribute("auth", loginUser.getAuth());
+        session.setAttribute(SessionName.USER_ID, loginUser.getId());
+        session.setAttribute(SessionName.USER_AUTH, loginUser.getAuth());
 
         return new ResponseEntity<>("로그인을 성공했습니다.", HttpStatus.OK);
     }

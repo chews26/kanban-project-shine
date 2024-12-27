@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class DeckService {
@@ -55,8 +57,29 @@ public class DeckService {
 
         Deck findDeck = findByIdOrElseThrow(id);
         int currentOrder = findDeck.getOrder();
+        int newOrder = dto.getOrder();
 
-        //순서 변경 로직 작성해야 함
+        //order값 변경이 없을떄
+        if (currentOrder == newOrder) {
+            return DeckResponseDto.toDto(findDeck);
+        }
+
+        //order값이 변경 되었을때
+        if(newOrder > currentOrder) {
+            List<Deck> deckUpdate = deckRepository.findDecksInOrderRange(boardId, currentOrder + 1, newOrder);
+
+            for (Deck deck : deckUpdate) {
+                deck.updateDeckOrder(deck.getOrder() - 1);
+            }
+        } else {
+            List<Deck> deckUpdate = deckRepository.findDecksInOrderRange(boardId, newOrder, currentOrder -1);
+
+            for (Deck deck : deckUpdate) {
+                deck.updateDeckOrder(deck.getOrder() + 1);
+            }
+        }
+
+        findDeck.updateDeckOrder(newOrder);
 
         return DeckResponseDto.toDto(findDeck);
     }

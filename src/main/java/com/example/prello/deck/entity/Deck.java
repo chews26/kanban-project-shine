@@ -25,9 +25,11 @@ public class Deck extends BaseEntity {
     @JoinColumn(name = "board_id", nullable = false)
     private Board board;
 
-    public Deck() {}
+    public Deck() {
+    }
 
-    public Deck(String title, int order, Board board) {
+    public Deck(Long id, String title, int order, Board board) {
+        this.id = id;
         this.title = title;
         this.order = order;
         this.board = board;
@@ -35,14 +37,14 @@ public class Deck extends BaseEntity {
 
     //제목 업데이트
     public void updateDeckTitle(String title) {
-        if(title != null) {
+        if (title != null) {
             this.title = title;
         }
     }
 
     //순서 업데이트
     public void updateDeckOrder(int order) {
-        if(order >= 0) {
+        if (order >= 0) {
             this.order = order;
         }
     }

@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface WorkspaceRepository extends JpaRepository<Workspace, Long>, WorkspaceRepositoryQuery {
-    boolean existsByIdAndOwnerId(Long workspaceId, Long userId);
+
 }

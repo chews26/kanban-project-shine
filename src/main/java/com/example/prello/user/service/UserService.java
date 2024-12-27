@@ -1,5 +1,7 @@
 package com.example.prello.user.service;
 
+import com.example.prello.common.SessionName;
+import com.example.prello.member.repository.MemberRepository;
 import com.example.prello.user.dto.DeleteRequestDto;
 import com.example.prello.user.dto.LoginRequestDto;
 import com.example.prello.user.dto.SignUpRequestDto;
@@ -8,11 +10,14 @@ import com.example.prello.user.entity.User;
 import com.example.prello.user.enums.UserErrorCode;
 import com.example.prello.user.repository.UserRepository;
 import com.example.prello.common.PasswordEncoder;
+import com.example.prello.workspace.dto.WorkspacePermissionDto;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,6 +25,8 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final HttpSession session;
+    private final MemberRepository memberRepository;
 
     public UserResponseDto signUp(SignUpRequestDto requestDto) {
 
@@ -48,6 +55,13 @@ public class UserService {
         if(!PasswordEncoder.matches(requestDto.getPassword(), findUser.getPassword())) {
             throw new IllegalArgumentException(UserErrorCode.INVALID_PASSWORD.getMessage());
         }
+
+        session.setAttribute(SessionName.USER_ID, findUser.getId());
+        session.setAttribute(SessionName.USER_AUTH, findUser.getAuth());
+
+        // todo member서비스로 가져올 경우 순환참조 문제 발생
+        List<WorkspacePermissionDto> permissions = memberRepository.findWorkspacePermissionsByUserId(findUser.getId());
+        session.setAttribute(SessionName.WORKSPACE_PERMIT, permissions);
 
         return findUser;
     }

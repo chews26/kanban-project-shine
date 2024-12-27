@@ -1,12 +1,15 @@
 package com.example.prello.security.session;
 
 import com.example.prello.common.SessionName;
+import com.example.prello.workspace.dto.WorkspacePermissionDto;
 import com.example.prello.user.entity.User;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -50,6 +53,24 @@ public class SessionUtils {
         if (!loginEmail.equals(ownerEmail)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "권한이 없습니다.");
         }
+    }
+
+    public List<WorkspacePermissionDto> getWorkspacePermissions() {
+        @SuppressWarnings("unchecked")
+        List<WorkspacePermissionDto> permissions =
+                (List<WorkspacePermissionDto>) session.getAttribute(SessionName.WORKSPACE_PERMIT);
+
+        if (permissions == null) {
+            throw new IllegalStateException("워크스페이스 권한 정보가 세션에 없습니다.");
+        }
+        return permissions;
+    }
+
+    public WorkspacePermissionDto getWorkspacePermission(Long workspaceId) {
+        return getWorkspacePermissions().stream()
+                .filter(permission -> permission.getWorkspaceId().equals(workspaceId))
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("워크스페이스 권한 정보를 찾을 수 없습니다. 워크스페이스 ID: " + workspaceId));
     }
 
     // 세션 데이터 업데이트

@@ -8,7 +8,6 @@ import com.example.prello.card.dto.CardResponseDto;
 import com.example.prello.card.entity.Card;
 import com.example.prello.card.repository.CardRepository;
 import com.example.prello.comment.entity.Comment;
-import com.example.prello.comment.service.CommentService;
 import com.example.prello.deck.entity.Deck;
 import com.example.prello.deck.service.DeckService;
 import com.example.prello.user.entity.User;
@@ -32,7 +31,6 @@ public class CardService {
     private final WorkspaceService workspaceService;
     private final BoardService boardService;
     private final DeckService deckService;
-    private final CommentService commentService;
     private final UserService userService;
 
 

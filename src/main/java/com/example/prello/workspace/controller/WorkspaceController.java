@@ -1,7 +1,5 @@
 package com.example.prello.workspace.controller;
 
-import com.example.prello.workspace.dto.WorkspaceMemberRequestDto;
-import com.example.prello.workspace.dto.WorkspaceMemberResponseDto;
 import com.example.prello.workspace.dto.WorkspaceRequestDto;
 import com.example.prello.workspace.dto.WorkspaceResponseDto;
 import com.example.prello.workspace.service.WorkspaceService;
@@ -55,22 +53,5 @@ public class WorkspaceController {
             @PathVariable Long id) {
         String message = workspaceService.deleteWorkspace(id);
         return new ResponseEntity<>(message, HttpStatus.OK);
-    }
-
-    // 워크스페이스 멤버 추가
-    @PostMapping("/{id}/members")
-    public ResponseEntity<String> addWorkspaceMember(
-            @PathVariable Long id,
-            @Valid @RequestBody WorkspaceMemberRequestDto workspaceMemberRequestDto) {
-        String message = workspaceService.addWorkspaceMember(id, workspaceMemberRequestDto);
-        return new ResponseEntity<>(message, HttpStatus.OK);
-    }
-
-    // 워크스페이스 멤버 조회
-    @GetMapping("/id/members")
-    public ResponseEntity<List<WorkspaceMemberResponseDto>> getWorkspaceMembers(
-            @PathVariable Long id) {
-        List<WorkspaceMemberResponseDto> workspaceMemberResponseDtoList = workspaceService.getWorkspaceMembers();
-        return new ResponseEntity<>(workspaceMemberResponseDtoList, HttpStatus.OK);
     }
 }

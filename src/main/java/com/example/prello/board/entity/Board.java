@@ -1,4 +1,4 @@
-package com.example.prello.board;
+package com.example.prello.board.entity;
 
 import com.example.prello.common.BaseEntity;
 import com.example.prello.workspace.entity.Workspace;

@@ -1,5 +1,6 @@
-package com.example.prello.board;
+package com.example.prello.board.dto;
 
+import com.example.prello.board.entity.Board;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

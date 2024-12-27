@@ -1,5 +1,8 @@
-package com.example.prello.board;
+package com.example.prello.board.controller;
 
+import com.example.prello.board.dto.BoardRequestDto;
+import com.example.prello.board.dto.BoardResponseDto;
+import com.example.prello.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

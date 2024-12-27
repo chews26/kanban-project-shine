@@ -1,4 +1,4 @@
-package com.example.prello.board;
+package com.example.prello.board.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;

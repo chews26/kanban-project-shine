@@ -108,7 +108,7 @@ public class AttachmentService {
      */
     @Transactional
     public void addAttachmentToCard(Long cardId, Long attachmentId) {
-        Card findCard = cardService.findCardByIdOrElseThrow(cardId);
+        Card findCard = cardService.findByIdOrElseThrow(cardId);
         Attachment findAttachment = findByIdOrElseThrow(attachmentId);
 
         findAttachment.addAttachmentToCard(findCard);

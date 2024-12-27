@@ -1,8 +1,8 @@
-package com.example.prello.user.security.interceptor;
+package com.example.prello.interceptor;
 
 import com.example.prello.user.dto.AuthenticationDto;
 import com.example.prello.user.enums.Auth;
-import com.example.prello.user.security.constant.SessionName;
+import com.example.prello.common.SessionName;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;

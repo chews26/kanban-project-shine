@@ -1,6 +1,6 @@
-package com.example.prello.user.security.filter;
+package com.example.prello.filter;
 
-import com.example.prello.user.security.constant.SessionName;
+import com.example.prello.common.SessionName;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;

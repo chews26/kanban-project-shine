@@ -1,7 +1,7 @@
-package com.example.prello.user.security.config;
+package com.example.prello.config;
 
-import com.example.prello.user.security.filter.LoginFilter;
-import com.example.prello.user.security.interceptor.AdminAuthInterceptor;
+import com.example.prello.filter.LoginFilter;
+import com.example.prello.interceptor.AdminAuthInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;

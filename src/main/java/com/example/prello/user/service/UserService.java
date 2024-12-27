@@ -7,14 +7,12 @@ import com.example.prello.user.dto.UserResponseDto;
 import com.example.prello.user.entity.User;
 import com.example.prello.user.enums.UserErrorCode;
 import com.example.prello.user.repository.UserRepository;
-import com.example.prello.user.security.PasswordEncoder;
+import com.example.prello.common.PasswordEncoder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.security.InvalidParameterException;
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service

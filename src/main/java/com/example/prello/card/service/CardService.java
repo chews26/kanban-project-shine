@@ -1,6 +1,6 @@
 package com.example.prello.card.service;
 
-import com.example.prello.board.BoardService;
+import com.example.prello.board.service.BoardService;
 import com.example.prello.card.dto.CardAssigneesRequestDto;
 import com.example.prello.card.dto.CardDetailResponseDto;
 import com.example.prello.card.dto.CardRequestDto;
@@ -8,6 +8,7 @@ import com.example.prello.card.dto.CardResponseDto;
 import com.example.prello.card.entity.Card;
 import com.example.prello.card.repository.CardRepository;
 import com.example.prello.comment.entity.Comment;
+import com.example.prello.comment.service.CommentService;
 import com.example.prello.deck.entity.Deck;
 import com.example.prello.deck.service.DeckService;
 import com.example.prello.user.entity.User;

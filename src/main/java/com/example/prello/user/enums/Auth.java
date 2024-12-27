@@ -1,5 +1,8 @@
 package com.example.prello.user.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum Auth {
     USER("user"),
     ADMIN("admin");
@@ -12,7 +15,7 @@ public enum Auth {
 
     public static Auth of(String authName) throws IllegalArgumentException {
         for (Auth auth : values()) {
-            if (auth.name().equals(authName)) {
+            if (auth.getName().equals(authName)) {
                 return auth;
             }
         }

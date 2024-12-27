@@ -42,7 +42,7 @@ public class DeckService {
     public DeckResponseDto updateDeckTitle(Long workspaceId, Long boardId, Long id, @Valid DeckRequestDto dto) {
         checkPathVariable(workspaceId, boardId);
 
-        Deck findDeck = findDeckById(id);
+        Deck findDeck = findByIdOrElseThrow(id);
         findDeck.updateDeckTitle(dto.getTitle());
 
         return DeckResponseDto.toDto(findDeck);
@@ -53,7 +53,7 @@ public class DeckService {
     public DeckResponseDto updateDexkOrder(Long workspaceId, Long boardId, Long id, @Valid DeckRequestDto dto) {
         checkPathVariable(workspaceId, boardId);
 
-        Deck findDeck = findDeckById(id);
+        Deck findDeck = findByIdOrElseThrow(id);
         int currentOrder = findDeck.getOrder();
 
         //순서 변경 로직 작성해야 함
@@ -66,12 +66,12 @@ public class DeckService {
     public void deleteDeck(Long workspaceId, Long boardId, Long id) {
         checkPathVariable(workspaceId, boardId);
 
-        Deck findDeck = findDeckById(id);
+        Deck findDeck = findByIdOrElseThrow(id);
         deckRepository.delete(findDeck);
     }
 
     //리스트 id로 조회
-    public Deck findDeckById(Long id) {
+    public Deck findByIdOrElseThrow(Long id) {
         return deckRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("리스트를 찾을 수 없습니다."));
     }

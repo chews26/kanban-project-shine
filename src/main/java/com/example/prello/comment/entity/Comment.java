@@ -5,6 +5,8 @@ import com.example.prello.common.BaseEntity;
 
 import com.example.prello.user.entity.User;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -13,6 +15,7 @@ import static com.example.prello.comment.entity.QComment.comment;
 @Entity
 @Getter
 @Builder(builderClassName = "Builder")
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Table(name = "`comment`")
 public class Comment extends BaseEntity {
     @Id
@@ -35,8 +38,7 @@ public class Comment extends BaseEntity {
 
     public Comment() {}
 
-    public Comment(Long id, String name, String content, User user, Card card) {
-        this.id = id;
+    public Comment( String name, String content, User user, Card card) {
         this.name = name;
         this.content = content;
         this.user = user;

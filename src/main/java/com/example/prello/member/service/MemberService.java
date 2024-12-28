@@ -44,6 +44,8 @@ public class MemberService {
         MemberAuth currentAuth = member.getAuth();
         member.updateMemberAuth(memberRequestDto.getAuth());
 
+        sessionUtils.updateWorkspacePermission(id, MemberAuth.WORKSPACE);
+
         return MemberResponseDto.toDto(member);
     }
 
@@ -71,6 +73,8 @@ public class MemberService {
                 .build();
 
         memberRepository.save(member);
+
+        sessionUtils.updateWorkspacePermission(userId, MemberAuth.WORKSPACE);
 
         return "멤버가 추가되었습니다." + user.getEmail();
     }

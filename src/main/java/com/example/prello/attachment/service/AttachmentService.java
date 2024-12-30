@@ -45,7 +45,16 @@ public class AttachmentService {
     public AttachmentResponseDto createAttachment(AttachmentForm form) {
         Attachment attachment;
         try {
-            attachment = fileStore.storeFile(form.getAttachFile());
+            String storeFileName = fileStore.storeFile(form.getAttachFile());
+
+            String fileUrl = fileStore.getDestinationFileUrl() + "/" + storeFileName;
+
+            attachment = Attachment.builder()
+                    .uploadFileName(form.getFileName())
+                    .storeFileName(storeFileName)
+                    .fileUrl(fileUrl)
+                    .fileType(fileStore.findExt(form.getAttachFile().getOriginalFilename()))
+                    .build();
         } catch (IOException e) {
             log.info(e.getMessage());
             throw new CustomException(AttachmentErrorCode.ATTACHMENT_NOT_INCLUDED);

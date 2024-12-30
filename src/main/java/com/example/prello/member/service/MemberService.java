@@ -2,8 +2,6 @@ package com.example.prello.member.service;
 
 import com.example.prello.exception.CustomException;
 import com.example.prello.exception.MemberErrorCode;
-import com.example.prello.exception.CustomException;
-import com.example.prello.exception.member.MemberErrorCode;
 import com.example.prello.member.auth.MemberAuth;
 import com.example.prello.member.repository.MemberRepository;
 import com.example.prello.member.dto.MemberRequestDto;

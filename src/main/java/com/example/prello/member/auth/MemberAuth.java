@@ -1,7 +1,8 @@
 package com.example.prello.member.auth;
 
 import com.example.prello.exception.CustomException;
-import com.example.prello.exception.member.MemberErrorCode;
+
+import com.example.prello.exception.MemberErrorCode;
 import lombok.Getter;
 
 @Getter

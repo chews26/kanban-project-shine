@@ -1,6 +1,7 @@
 package com.example.prello.member.entity;
 
 import com.example.prello.common.BaseEntity;
+import com.example.prello.exception.CustomException;
 import com.example.prello.member.auth.MemberAuth;
 import com.example.prello.user.entity.User;
 import com.example.prello.workspace.entity.Workspace;

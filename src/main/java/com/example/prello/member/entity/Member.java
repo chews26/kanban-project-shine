@@ -42,7 +42,7 @@ public class Member extends BaseEntity {
 
     public Member() {}
 
-    public void updateMemberAuth(MemberAuth auth) throws IllegalAccessException {
+    public void updateMemberAuth(MemberAuth auth) {
         this.auth.validateAuthChange(auth);
         this.auth = auth;
     }

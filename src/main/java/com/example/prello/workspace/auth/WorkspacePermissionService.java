@@ -1,4 +1,4 @@
-package com.example.prello.workspace.service;
+package com.example.prello.workspace.auth;
 
 import com.example.prello.member.auth.MemberAuth;
 import com.example.prello.security.session.SessionUtils;

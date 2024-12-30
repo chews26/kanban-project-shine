@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MemberRequestDto {
 
-    @NotNull(message = "권한은 필수 입력값 입니다.")
     private final MemberAuth auth;
 
     @Size(max = 50, message = "이메일의 최대길이는 50자 입니다.")

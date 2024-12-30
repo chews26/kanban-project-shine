@@ -7,7 +7,7 @@ import com.example.prello.member.repository.MemberRepository;
 import com.example.prello.member.dto.MemberRequestDto;
 import com.example.prello.member.dto.MemberResponseDto;
 import com.example.prello.member.entity.Member;
-import com.example.prello.workspace.service.WorkspacePermissionService;
+import com.example.prello.workspace.auth.WorkspacePermissionService;
 import com.example.prello.security.session.SessionUtils;
 import com.example.prello.user.entity.User;
 import com.example.prello.user.service.UserService;
@@ -93,6 +93,7 @@ public class MemberService {
     // 워크스페이스 멤버 조회
     // todo 세션에서 유저정보 확인 후 권한 체크 필요
     public List<MemberResponseDto> getWorkspaceMembers(Long workspaceId) {
+
         Workspace workspace = workspaceService.findByIdOrElseThrow(workspaceId);
         Long userId = sessionUtils.getLoginUserId();
         workspacePermissionService.validateWorkspaceAccess(workspaceId, userId, MemberAuth.READ_ONLY);

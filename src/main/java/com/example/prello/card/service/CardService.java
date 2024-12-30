@@ -9,6 +9,7 @@ import com.example.prello.comment.repository.CommentRepository;
 import com.example.prello.comment.service.CommentService;
 import com.example.prello.deck.entity.Deck;
 import com.example.prello.deck.service.DeckService;
+import com.example.prello.member.auth.MemberPermissionService;
 import com.example.prello.user.entity.User;
 import com.example.prello.user.service.UserService;
 import com.example.prello.workspace.service.WorkspaceService;
@@ -33,6 +34,7 @@ public class CardService {
     private final UserService userService;
     private final CommentService commentService;
     private final CommentRepository commentRepository;
+    private final MemberPermissionService memberPermissionService;
 
 
     /**
@@ -42,6 +44,8 @@ public class CardService {
      */
     @Transactional
     public CardResponseDto createCard(Long workspaceId, Long boardId, Long deckId, CardRequestDto dto) {
+        memberPermissionService.validateBoardAccess(workspaceId);
+
         checkPathVariable(workspaceId, boardId, deckId);
         Deck findDeck = deckService.findByIdOrElseThrow(deckId);
 
@@ -66,6 +70,8 @@ public class CardService {
      */
     @Transactional
     public CardResponseDto updateCard(Long workspaceId, Long boardId, Long deckId, Long cardId, CardRequestDto dto) {
+        memberPermissionService.validateBoardAccess(workspaceId);
+
         checkPathVariable(workspaceId, boardId, deckId);
         Card findCard = cardRepository.findByIdOrElseThrow(cardId);
         findCard.updateCard(dto.getTitle(), dto.getDescription(), dto.getEndAt());
@@ -80,6 +86,8 @@ public class CardService {
      * @return Comment 목록 포함한 Card dto
      */
     public CardDetailResponseDto findCard(Long workspaceId, Long boardId, Long deckId, Long id) {
+        memberPermissionService.validateReadOnlyAccess(workspaceId);
+
         checkPathVariable(workspaceId, boardId, deckId);
         Card findCard = cardRepository.findByIdOrElseThrow(id);
 
@@ -113,6 +121,8 @@ public class CardService {
      */
     @Transactional
     public void deleteCard(Long workspaceId, Long boardId, Long deckId, Long id) {
+        memberPermissionService.validateBoardAccess(workspaceId);
+
         checkPathVariable(workspaceId, boardId, deckId);
         Card findCard = cardRepository.findByIdOrElseThrow(id);
 
@@ -126,6 +136,8 @@ public class CardService {
      */
     @Transactional
     public void updateAssignees(Long workspaceId, Long boardId, Long deckId, Long id, CardAssigneesRequestDto dto) {
+        memberPermissionService.validateBoardAccess(workspaceId);
+
         checkPathVariable(workspaceId, boardId, deckId);
         Card findCard = cardRepository.findByIdOrElseThrow(id);
 

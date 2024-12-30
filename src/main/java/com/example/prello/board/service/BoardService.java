@@ -12,7 +12,7 @@ import com.example.prello.deck.entity.Deck;
 import com.example.prello.deck.repository.DeckRepository;
 import com.example.prello.exception.BoardErrorCode;
 import com.example.prello.exception.CustomException;
-import com.example.prello.exception.DeckErrorCode;
+import com.example.prello.member.auth.MemberPermissionService;
 import com.example.prello.workspace.entity.Workspace;
 import com.example.prello.workspace.service.WorkspaceService;
 import lombok.RequiredArgsConstructor;
@@ -31,9 +31,13 @@ public class BoardService {
     private final WorkspaceService workspaceService;
     private final CardRepository cardRepository;
     private final DeckRepository deckRepository;
+    private final MemberPermissionService memberPermissionService;
 
     // 보드 생성
     public BoardResponseDto createBoard(Long workspaceId, BoardRequestDto boardRequestDto) {
+
+        memberPermissionService.validateBoardAccess(workspaceId);
+
         Workspace workspace = workspaceService.findByIdOrElseThrow(workspaceId);
 
         Board board = new Board(boardRequestDto.getTitle(), boardRequestDto.getBgColor(), boardRequestDto.getBgImage(), workspace);
@@ -51,6 +55,8 @@ public class BoardService {
 
     // 보드 수정
     public BoardResponseDto updateBoard(Long workspaceId, Long id, BoardRequestDto boardRequestDto) {
+
+        memberPermissionService.validateBoardAccess(workspaceId);
 
         Board board = findByWorkspaceIdAndBoardIdOrElseThrow(workspaceId, id);
 
@@ -70,6 +76,8 @@ public class BoardService {
 
     // 보드 상세 조회
     public BoardResponseDto getBoard(Long workspaceId, Long boardId) {
+        memberPermissionService.validateReadOnlyAccess(workspaceId);
+
         Board board = findByWorkspaceIdAndBoardIdOrElseThrow(workspaceId, boardId);
 
         List<Deck> decks = deckRepository.findByBoardId(boardId);
@@ -95,6 +103,7 @@ public class BoardService {
 
     // 보드 삭제
     public String deleteBoard(Long workspaceId, Long id) {
+        memberPermissionService.validateBoardAccess(workspaceId);
         findByWorkspaceIdAndBoardIdOrElseThrow(workspaceId, id);
         boardRepository.deleteById(id);
         return "보드가 삭제되었습니다.";

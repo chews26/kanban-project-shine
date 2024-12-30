@@ -3,6 +3,7 @@ package com.example.prello.workspace.service;
 import com.example.prello.exception.CustomException;
 import com.example.prello.exception.WorkspaceErrorCode;
 import com.example.prello.member.auth.MemberAuth;
+import com.example.prello.member.auth.MemberPermissionService;
 import com.example.prello.member.entity.Member;
 import com.example.prello.member.repository.MemberRepository;
 import com.example.prello.security.session.SessionUtils;
@@ -27,10 +28,12 @@ public class WorkspaceService {
     private final SessionUtils sessionUtils;
     private final UserService userService;
     private final MemberRepository memberRepository;
+    private final MemberPermissionService memberPermissionService;
 
     // 워크스페이스 생성
     @Transactional
     public WorkspaceResponseDto createWorkspace(@Valid WorkspaceRequestDto workspaceRequestDto) {
+
         Long userId = sessionUtils.getLoginUserId();
 
         Workspace workspace = Workspace.builder()
@@ -56,6 +59,7 @@ public class WorkspaceService {
     // todo 워크스페이스 소유자만 워크스페이스 수정가능하게 로직 수정 필요
     @Transactional
     public WorkspaceResponseDto updateWorkspace(Long id, @Valid WorkspaceRequestDto workspaceRequestDto) {
+        memberPermissionService.validateWorkspaceAccess(id);
         Workspace workspace = findByIdOrElseThrow(id);
 
         WorkspacePermissionDto permission = sessionUtils.getWorkspacePermission(id);

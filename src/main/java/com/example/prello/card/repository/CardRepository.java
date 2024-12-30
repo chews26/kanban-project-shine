@@ -23,8 +23,8 @@ public interface CardRepository extends JpaRepository<Card, Long> {
     }
 
     @Query("SELECT c FROM Card c " +
-            "JOIN FETCH c.deck d " +
-            "JOIN FETCH d.board b " +
+            "LEFT JOIN FETCH c.deck d " +
+            "LEFT JOIN FETCH d.board b " +
             "WHERE b.id = :boardId AND b.workspace.id = :workspaceId")
     List<Card> findCardsByWorkspaceIdAndBoardId(@Param("workspaceId") Long workspaceId,
                                                 @Param("boardId") Long boardId);

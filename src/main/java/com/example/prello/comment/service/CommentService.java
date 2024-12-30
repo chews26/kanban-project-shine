@@ -18,6 +18,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CommentService {
@@ -27,7 +30,6 @@ public class CommentService {
     private final BoardService boardService;
     private final DeckService deckService;
     private final CardRepository cardRepository;
-    private final CardService cardService;
     private final UserService userService;
     private final HttpSession session;
 
@@ -80,6 +82,12 @@ public class CommentService {
 
         commentRepository.delete(findComment);
     }
+
+    public List<Comment> findByCardId(Long id) {
+        List<Comment> comments = commentRepository.findByCardIdOrderByCreatedAtDesc(id);
+        return comments != null ? comments : Collections.emptyList();
+    }
+
 
     //댓글 id로 조회
     public Comment findByIdOrElseThrow(Long id) {

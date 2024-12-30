@@ -22,4 +22,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
             + "ORDER BY co.createdAt"
     )
     List<Comment> findLatestCommentsByCardId(@Param("cardId") Long cardId);
+
+    List<Comment> findByCardIdOrderByCreatedAtDesc(Long cardId);
 }

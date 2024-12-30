@@ -14,4 +14,6 @@ public interface DeckRepository extends JpaRepository<Deck, Long> {
             @Param("boardId") Long boardId,
             @Param("startOrder") int startOrder,
             @Param("endOrder") int endOrder);
+
+    List<Deck> findByBoardId(Long boardId);
 }

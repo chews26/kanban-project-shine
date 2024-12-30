@@ -16,6 +16,8 @@ public interface DeckRepository extends JpaRepository<Deck, Long> {
             @Param("startOrder") int startOrder,
             @Param("endOrder") int endOrder);
 
+    List<Deck> findByBoardId(Long boardId);
+
     @Query("SELECT MAX(d.order) FROM Deck d WHERE d.board.id = :boardId")
     Optional<Integer> findMaxOrderByBoardId(@Param("boardId") Long boardId);
 }

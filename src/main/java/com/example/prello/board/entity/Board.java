@@ -21,7 +21,7 @@ public class Board extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "workspace_id")
+    @JoinColumn(name = "workspace_id", nullable = false)
     private Workspace workspace;
 
     private String title;
@@ -37,6 +37,13 @@ public class Board extends BaseEntity {
         this.title = title;
         this.bg_color = bg_color;
         this.bg_image = bg_image;
+    }
+
+    public Board(String title, String bg_color, String bg_image , Workspace workspace) {
+        this.title = title;
+        this.bg_color = bg_color;
+        this.bg_image = bg_image;
+        this.workspace = workspace;
     }
 
     public Board update(String title, String bg_color, String bg_image) {

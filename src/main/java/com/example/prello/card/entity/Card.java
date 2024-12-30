@@ -19,8 +19,8 @@ public class Card extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "list_id")
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "deck_id")
     private Deck deck;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -37,13 +37,6 @@ public class Card extends BaseEntity {
     private LocalDateTime endAt;
 
     public Card(){}
-
-//    public Card(Deck deck, String title, String description, LocalDateTime endAt) {
-//        this.deck = deck;
-//        this.title = title;
-//        this.description = description;
-//        this.endAt = endAt;
-//    }
 
     /**
      * 담당자 추가

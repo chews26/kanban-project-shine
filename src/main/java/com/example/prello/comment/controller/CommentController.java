@@ -29,7 +29,7 @@ public class CommentController {
             return new ResponseEntity<>(commentResponseDto, HttpStatus.CREATED);
     }
     //댓글 수정
-    @PutMapping("{commentId}")
+    @PatchMapping("{commentId}")
     public ResponseEntity<CommentResponseDto> updateComment(
             @PathVariable Long workspaceId,
             @PathVariable Long boardId,

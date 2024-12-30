@@ -7,6 +7,9 @@ import com.example.prello.attachment.entity.Attachment;
 import com.example.prello.attachment.repository.AttachmentRepository;
 import com.example.prello.card.entity.Card;
 import com.example.prello.card.service.CardService;
+import com.example.prello.exception.AttachmentErrorCode;
+import com.example.prello.exception.CustomException;
+import com.example.prello.exception.ExceptionType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.FileSystemResource;
@@ -40,13 +43,12 @@ public class AttachmentService {
      */
     @Transactional
     public AttachmentResponseDto createAttachment(AttachmentForm form) {
-        // TODO: 커스텀 예외
         Attachment attachment;
         try {
             attachment = fileStore.storeFile(form.getAttachFile());
         } catch (IOException e) {
             log.info(e.getMessage());
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            throw new CustomException(AttachmentErrorCode.ATTACHMENT_NOT_INCLUDED);
         }
 
         Attachment savedAttachment = attachmentRepository.save(attachment);
@@ -71,7 +73,7 @@ public class AttachmentService {
      * @return 첨부파일 리소스
      */
     public Resource downloadAttachment(Long id) {
-        Attachment findAttachment = findByIdOrElseThrow(id);
+        Attachment findAttachment = attachmentRepository.findByIdOrElseThrow(id);
         String storeFileName = findAttachment.getStoreFileName();
         return new FileSystemResource(new File(fileStore.getDestinationFileUrl(), storeFileName));
     }
@@ -83,7 +85,7 @@ public class AttachmentService {
      */
     @Transactional
     public void deleteAttachment(Long id) {
-        Attachment findAttachment = findByIdOrElseThrow(id);
+        Attachment findAttachment = attachmentRepository.findByIdOrElseThrow(id);
         attachmentRepository.delete(findAttachment);
     }
 
@@ -94,8 +96,9 @@ public class AttachmentService {
      * @return content disposition 문자열
      */
     public String createContentDisposition(Long id) {
-        Attachment findAttachment = findByIdOrElseThrow(id);
-        String encodedName = URLEncoder.encode(findAttachment.getUploadFileName(), StandardCharsets.UTF_8).replace("+", "%20");
+        Attachment findAttachment = attachmentRepository.findByIdOrElseThrow(id);
+        String encodedName = URLEncoder.encode(findAttachment.getUploadFileName(), StandardCharsets.UTF_8)
+                .replace("+", "%20");
         return "attachment; filename=\"" + encodedName + "\"";
     }
 
@@ -108,19 +111,8 @@ public class AttachmentService {
     @Transactional
     public void addAttachmentToCard(Long cardId, Long attachmentId) {
         Card findCard = cardService.findByIdOrElseThrow(cardId);
-        Attachment findAttachment = findByIdOrElseThrow(attachmentId);
+        Attachment findAttachment = attachmentRepository.findByIdOrElseThrow(attachmentId);
 
         findAttachment.addAttachmentToCard(findCard);
-    }
-
-    /**
-     * 레포지토리를 통해 Attachment 를 찾음
-     *
-     * @param id 첨부파일 식별자
-     * @return Attachment
-     */
-    public Attachment findByIdOrElseThrow(Long id) {
-        return attachmentRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 }

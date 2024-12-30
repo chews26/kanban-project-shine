@@ -34,7 +34,7 @@ public class DeckService {
 
         Board board = boardService.findByIdOrElseThrow(boardId);
 
-        int newOrder = deckRepository.findMaxOrderByBoardId(boardId).orElse(-1) + 1;
+        int newOrder = deckRepository.findMaxOrderByBoardId(boardId).orElse(0) + 1;
 
         Deck deck = Deck.builder()
                 .title(dto.getTitle())
@@ -70,13 +70,13 @@ public class DeckService {
         int currentOrder = findDeck.getOrder();
         int newOrder = dto.getOrder();
 
-        int maxOrder = deckRepository.findMaxOrderByBoardId(boardId).orElse(0);
+        int maxOrder = deckRepository.findMaxOrderByBoardId(boardId).orElse(1);
         if (newOrder > maxOrder) {
             newOrder = maxOrder;
         }
 
-        if (newOrder < 0) {
-            newOrder = 0;
+        if (newOrder < 1) {
+            newOrder = 1;
         }
 
         // order값 변경이 없을떄

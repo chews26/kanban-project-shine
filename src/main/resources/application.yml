@@ -35,6 +35,6 @@ springdoc:
     enabled: true
 
 ### Slack ###
-webhook:
-  slack:
+slack:
+  webhook:
     url: ${SLACK_WEBHOOK_URL}

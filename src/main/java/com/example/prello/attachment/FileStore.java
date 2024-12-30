@@ -5,6 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.UUID;
 
 @Component
@@ -16,7 +17,7 @@ public class FileStore {
      * @return 파일 저장 경로
      */
     public String getDestinationFileUrl() {
-        return "C:/Prello";
+        return Paths.get(System.getProperty("user.home"), "Prello").toString();
     }
 
     /**

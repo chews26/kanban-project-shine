@@ -28,7 +28,7 @@ public class DeckController {
     }
 
     //리스트 제목 수정
-    @PutMapping("/{listId}")
+    @PatchMapping("/{id}")
     public ResponseEntity<DeckResponseDto> updateDeckTitle(
             @PathVariable Long workspaceId,
             @PathVariable Long boardId,
@@ -40,7 +40,7 @@ public class DeckController {
     }
 
     //리스트 순서 수정
-    @PutMapping("/{listId}/order")
+    @PatchMapping("/{id}/order")
     public ResponseEntity<DeckResponseDto> updateDeckOrder(
             @PathVariable Long workspaceId,
             @PathVariable Long boardId,
@@ -51,7 +51,7 @@ public class DeckController {
             return new ResponseEntity<>(deckResponseDto, HttpStatus.OK);
     }
     //리스트 삭제
-    @DeleteMapping("/{listId}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<DeckResponseDto> deleteDeck(
             @PathVariable Long workspaceId,
             @PathVariable Long boardId,

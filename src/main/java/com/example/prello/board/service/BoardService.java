@@ -35,6 +35,7 @@ public class BoardService {
         Board board = findByIdOrElseThrow(id);
 
         Board update = board.update(boardRequestDto.getTitle(), boardRequestDto.getBgColor(), boardRequestDto.getBgImage());
+        boardRepository.save(board);
 
         return BoardResponseDto.toDto(update);
     }

@@ -1,7 +1,6 @@
 package com.example.prello.board.dto;
 
 import com.example.prello.board.entity.Board;
-import com.example.prello.deck.dto.DeckResponseDto;
 import com.example.prello.deck.dto.DeckResponseWithCardsDto;
 import lombok.Builder;
 import lombok.Getter;

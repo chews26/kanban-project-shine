@@ -7,12 +7,11 @@ import com.example.prello.board.repository.BoardRepository;
 import com.example.prello.card.dto.CardResponseDto;
 import com.example.prello.card.entity.Card;
 import com.example.prello.card.repository.CardRepository;
-import com.example.prello.card.service.CardService;
-import com.example.prello.deck.dto.DeckResponseDto;
 import com.example.prello.deck.dto.DeckResponseWithCardsDto;
 import com.example.prello.deck.entity.Deck;
-import com.example.prello.deck.repository.DeckRepository;
-import com.example.prello.deck.service.DeckService;
+import com.example.prello.exception.BoardErrorCode;
+import com.example.prello.exception.CustomException;
+import com.example.prello.exception.DeckErrorCode;
 import com.example.prello.workspace.entity.Workspace;
 import com.example.prello.workspace.service.WorkspaceService;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +28,6 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final WorkspaceService workspaceService;
     private final CardRepository cardRepository;
-    private final DeckRepository deckRepository;
 
     // 보드 생성
     public BoardResponseDto createBoard(Long workspaceId, BoardRequestDto boardRequestDto) {
@@ -71,21 +69,21 @@ public class BoardService {
     public BoardResponseDto getBoard(Long workspaceId, Long boardId) {
         Board board = findByWorkspaceIdAndBoardIdOrElseThrow(workspaceId, boardId);
 
-        List<Deck> decks = deckRepository.findByBoardId(boardId);
-
-        List<Card> cards = cardRepository.findCardsByWorkspaceIdAndBoardId(workspaceId, boardId);
+        List<Card> cards = cardRepository.findCardsByWorkspaceIdAndBoardIdOrElseThrow(workspaceId, boardId);
 
         Map<Long, List<CardResponseDto>> cardsByDeck = cards.stream()
-                .collect(Collectors.groupingBy(
-                        card -> card.getDeck().getId(),
-                        Collectors.mapping(CardResponseDto::toDto, Collectors.toList())
-                ));
+                .collect(Collectors.groupingBy(card -> card.getDeck().getId(),
+                        Collectors.mapping(CardResponseDto::toDto, Collectors.toList())));
 
-        List<DeckResponseWithCardsDto> deckDtos = decks.stream()
-                .map(deck -> DeckResponseWithCardsDto.toDto(
-                        deck,
-                        cardsByDeck.getOrDefault(deck.getId(), List.of()) // 카드가 없으면 빈 리스트 반환
-                ))
+        List<DeckResponseWithCardsDto> deckDtos = cardsByDeck.entrySet().stream()
+                .map(entry -> {
+                    Deck deck = cards.stream()
+                            .filter(card -> card.getDeck().getId().equals(entry.getKey()))
+                            .findFirst()
+                            .orElseThrow(() -> new CustomException(DeckErrorCode.DECK_NOT_FOUND))
+                            .getDeck();
+                    return DeckResponseWithCardsDto.toDto(deck, entry.getValue());
+                })
                 .toList();
 
         return BoardResponseDto.toDto(board, deckDtos);
@@ -101,11 +99,11 @@ public class BoardService {
     // 보드 findById
     public Board findByIdOrElseThrow(Long id) {
         return boardRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException());
+                .orElseThrow(() -> new CustomException(BoardErrorCode.BOARD_NOT_FOUND));
     }
 
     public Board findByWorkspaceIdAndBoardIdOrElseThrow(Long workspaceId, Long id) {
         return boardRepository.findByWorkspaceIdAndBoardId(workspaceId, id)
-                .orElseThrow(() -> new IllegalArgumentException());
+                .orElseThrow(() -> new CustomException(BoardErrorCode.BOARD_ROUTE_NOT_FOUND));
     }
 }

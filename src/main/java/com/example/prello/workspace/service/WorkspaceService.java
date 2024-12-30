@@ -3,7 +3,10 @@ package com.example.prello.workspace.service;
 import com.example.prello.exception.CustomException;
 import com.example.prello.exception.WorkspaceErrorCode;
 import com.example.prello.member.auth.MemberAuth;
+import com.example.prello.member.entity.Member;
+import com.example.prello.member.repository.MemberRepository;
 import com.example.prello.security.session.SessionUtils;
+import com.example.prello.user.service.UserService;
 import com.example.prello.workspace.dto.WorkspacePermissionDto;
 import com.example.prello.workspace.dto.WorkspaceRequestDto;
 import com.example.prello.workspace.dto.WorkspaceResponseDto;
@@ -22,15 +25,26 @@ public class WorkspaceService {
 
     private final WorkspaceRepository workspaceRepository;
     private final SessionUtils sessionUtils;
+    private final UserService userService;
+    private final MemberRepository memberRepository;
 
     // 워크스페이스 생성
     @Transactional
     public WorkspaceResponseDto createWorkspace(@Valid WorkspaceRequestDto workspaceRequestDto) {
+        Long userId = sessionUtils.getLoginUserId();
+
         Workspace workspace = Workspace.builder()
                 .title(workspaceRequestDto.getTitle())
                 .description(workspaceRequestDto.getDescription())
                 .build();
         Workspace createWorkspace = workspaceRepository.save(workspace);
+
+        Member member = Member.builder()
+                .user(userService.findByIdOrElseThrow(userId))
+                .workspace(createWorkspace)
+                .auth(MemberAuth.WORKSPACE) // 워크스페이스 생성자는 무조건 WORKSPACE 권한
+                .build();
+        memberRepository.save(member);
 
         WorkspacePermissionDto permission = new WorkspacePermissionDto(createWorkspace.getId(), MemberAuth.WORKSPACE);
         sessionUtils.addWorkspacePermission(permission);

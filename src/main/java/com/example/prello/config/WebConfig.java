@@ -18,7 +18,6 @@ public class WebConfig implements WebMvcConfigurer {
 
     private final AdminAuthInterceptor adminAuthInterceptor;
 
-
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
 
@@ -26,7 +25,6 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns(ADMIN_REQUIRED_PATHS)
                 .order(Ordered.HIGHEST_PRECEDENCE + 1);
     }
-
 
     @Bean
     public FilterRegistrationBean<LoginFilter> authenticationFilter() {

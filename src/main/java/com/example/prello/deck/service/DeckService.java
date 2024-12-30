@@ -2,12 +2,12 @@ package com.example.prello.deck.service;
 
 import com.example.prello.board.entity.Board;
 import com.example.prello.board.service.BoardService;
+import com.example.prello.deck.dto.DeckUpdateRequestDto;
 import com.example.prello.deck.repository.DeckRepository;
 import com.example.prello.deck.dto.DeckRequestDto;
 import com.example.prello.deck.dto.DeckResponseDto;
 import com.example.prello.deck.entity.Deck;
 import com.example.prello.workspace.service.WorkspaceService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,11 +25,15 @@ public class DeckService {
     //리스트 생성
     @Transactional
     public DeckResponseDto createDeck(Long workspaceId, Long boardId, DeckRequestDto dto) {
-        Board board = checkPathVariable(workspaceId, boardId);
+        checkPathVariable(workspaceId, boardId);
+
+        Board board = boardService.findByIdOrElseThrow(boardId);
+
+        int newOrder = deckRepository.findMaxOrderByBoardId(boardId).orElse(-1) + 1;
 
         Deck deck = Deck.builder()
                 .title(dto.getTitle())
-                .order(0)
+                .order(newOrder)
                 .board(board)
                 .build();
 
@@ -41,7 +45,7 @@ public class DeckService {
 
     //리스트 제목 수정
     @Transactional
-    public DeckResponseDto updateDeckTitle(Long workspaceId, Long boardId, Long id, @Valid DeckRequestDto dto) {
+    public DeckResponseDto updateDeckTitle(Long workspaceId, Long boardId, Long id, DeckUpdateRequestDto dto) {
         checkPathVariable(workspaceId, boardId);
 
         Deck findDeck = findByIdOrElseThrow(id);
@@ -52,12 +56,21 @@ public class DeckService {
 
     //리스트 순서 수정
     @Transactional
-    public DeckResponseDto updateDexkOrder(Long workspaceId, Long boardId, Long id, @Valid DeckRequestDto dto) {
+    public DeckResponseDto updateDeckOrder(Long workspaceId, Long boardId, Long id, DeckUpdateRequestDto dto) {
         checkPathVariable(workspaceId, boardId);
 
         Deck findDeck = findByIdOrElseThrow(id);
         int currentOrder = findDeck.getOrder();
         int newOrder = dto.getOrder();
+
+        int maxOrder = deckRepository.findMaxOrderByBoardId(boardId).orElse(0);
+        if (newOrder > maxOrder) {
+            newOrder = maxOrder;
+        }
+
+        if (newOrder < 0) {
+            newOrder = 0;
+        }
 
         //order값 변경이 없을떄
         if (currentOrder == newOrder) {
@@ -65,6 +78,7 @@ public class DeckService {
         }
 
         //order값이 변경 되었을때
+
         if(newOrder > currentOrder) {
             List<Deck> deckUpdate = deckRepository.findDecksInOrderRange(boardId, currentOrder + 1, newOrder);
 
@@ -80,7 +94,6 @@ public class DeckService {
         }
 
         findDeck.updateDeckOrder(newOrder);
-
         return DeckResponseDto.toDto(findDeck);
     }
 
@@ -100,11 +113,11 @@ public class DeckService {
     }
 
     //workspace, board 검증 및 board 반환
-    private Board checkPathVariable(Long workspaceId, Long boardId) {
+    private void checkPathVariable(Long workspaceId, Long boardId) {
         //workspace 검증
         workspaceService.findByIdOrElseThrow(workspaceId);
 
         //board 검증
-        return boardService.findByIdOrElseThrow(boardId);
+        boardService.findByIdOrElseThrow(boardId);
     }
 }

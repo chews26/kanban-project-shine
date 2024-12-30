@@ -10,8 +10,10 @@ import com.example.prello.workspace.entity.Workspace;
 import com.example.prello.workspace.repository.WorkspaceRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -20,7 +22,7 @@ import java.util.List;
 public class WorkspaceService {
 
     private final WorkspaceRepository workspaceRepository;
-    SessionUtils sessionUtils;
+    private final SessionUtils sessionUtils;
 
     // 워크스페이스 생성
     @Transactional
@@ -43,6 +45,9 @@ public class WorkspaceService {
     public WorkspaceResponseDto updateWorkspace(Long id, @Valid WorkspaceRequestDto workspaceRequestDto) {
         Workspace workspace = workspaceRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 워크스페이스가 존재하지 않습니다."));
+
+        WorkspacePermissionDto permission = sessionUtils.getWorkspacePermission(id);
+
         workspace.update(workspaceRequestDto.getTitle(), workspaceRequestDto.getDescription());
         return WorkspaceResponseDto.toDto(workspace);
     }

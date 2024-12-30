@@ -1,5 +1,8 @@
 package com.example.prello.member.auth;
 
+import com.example.prello.exception.CustomException;
+import com.example.prello.exception.MemberErrorCode;
+import com.example.prello.security.session.SessionUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -7,21 +10,29 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MemberPermissionService {
 
-    public void workspacePermit(MemberAuth memberAuth) throws IllegalAccessException {
-        if (memberAuth == MemberAuth.WORKSPACE) {
-            throw new IllegalAccessException("READ_ONLY 권한 사용자는 이 작업을 수행할 수 없습니다.");
+    private final SessionUtils sessionUtils;
+
+    // READ_ONLY 권한 이상 검증
+    public void validateReadOnlyAccess(Long workspaceId) {
+        MemberAuth memberAuth = sessionUtils.getWorkspacePermission(workspaceId).getAuth();
+        if (!memberAuth.hasPermission(MemberAuth.READ_ONLY)) {
+            throw new CustomException(MemberErrorCode.ACCESS_FORBIDDEN);
         }
     }
 
-    public void boardPermit(MemberAuth memberAuth) throws IllegalAccessException {
-        if (memberAuth == MemberAuth.BOARD) {
-            throw new IllegalAccessException("READ_ONLY 권한 사용자는 이 작업을 수행할 수 없습니다.");
+    // BOARD 권한 이상 검증
+    public void validateBoardAccess(Long workspaceId) {
+        MemberAuth memberAuth = sessionUtils.getWorkspacePermission(workspaceId).getAuth();
+        if (!memberAuth.hasPermission(MemberAuth.BOARD)) {
+            throw new CustomException(MemberErrorCode.ACCESS_FORBIDDEN);
         }
     }
 
-    public void readOnlyPermit(MemberAuth memberAuth) throws IllegalAccessException {
-        if (memberAuth == MemberAuth.READ_ONLY) {
-            throw new IllegalAccessException("READ_ONLY 권한 사용자는 이 작업을 수행할 수 없습니다.");
+    // WORKSPACE 권한 검증
+    public void validateWorkspaceAccess(Long workspaceId) {
+        MemberAuth memberAuth = sessionUtils.getWorkspacePermission(workspaceId).getAuth();
+        if (!memberAuth.hasPermission(MemberAuth.WORKSPACE)) {
+            throw new CustomException(MemberErrorCode.ACCESS_FORBIDDEN);
         }
     }
 }

@@ -100,6 +100,7 @@ public class SessionUtils {
         updateSession(SessionName.WORKSPACE_PERMIT, permissions);
     }
 
+
     // 세션 데이터 업데이트
     public <T> void updateSession(String key, T value) {
         session.setAttribute(key, value);

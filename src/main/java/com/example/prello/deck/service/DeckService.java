@@ -9,6 +9,7 @@ import com.example.prello.deck.dto.DeckResponseDto;
 import com.example.prello.deck.entity.Deck;
 import com.example.prello.exception.CustomException;
 import com.example.prello.exception.DeckErrorCode;
+import com.example.prello.member.auth.MemberPermissionService;
 import com.example.prello.workspace.service.WorkspaceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,10 +24,12 @@ public class DeckService {
     private final WorkspaceService workspaceService;
     private final BoardService boardService;
     private final DeckRepository deckRepository;
+    private final MemberPermissionService memberPermissionService;
 
     //리스트 생성
     @Transactional
     public DeckResponseDto createDeck(Long workspaceId, Long boardId, DeckRequestDto dto) {
+        memberPermissionService.validateBoardAccess(workspaceId);
         checkPathVariable(workspaceId, boardId);
 
         Board board = boardService.findByIdOrElseThrow(boardId);
@@ -48,6 +51,7 @@ public class DeckService {
     //리스트 제목 수정
     @Transactional
     public DeckResponseDto updateDeckTitle(Long workspaceId, Long boardId, Long id, DeckUpdateRequestDto dto) {
+        memberPermissionService.validateBoardAccess(workspaceId);
         checkPathVariable(workspaceId, boardId);
 
         Deck findDeck = findByIdOrElseThrow(id);
@@ -59,6 +63,7 @@ public class DeckService {
     //리스트 순서 수정
     @Transactional
     public DeckResponseDto updateDeckOrder(Long workspaceId, Long boardId, Long id, DeckUpdateRequestDto dto) {
+        memberPermissionService.validateBoardAccess(workspaceId);
         checkPathVariable(workspaceId, boardId);
 
         Deck findDeck = findByIdOrElseThrow(id);
@@ -102,6 +107,7 @@ public class DeckService {
     //리스트 삭제
     @Transactional
     public void deleteDeck(Long workspaceId, Long boardId, Long id) {
+        memberPermissionService.validateBoardAccess(workspaceId);
         checkPathVariable(workspaceId, boardId);
 
         Deck findDeck = findByIdOrElseThrow(id);

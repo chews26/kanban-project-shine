@@ -12,6 +12,7 @@ import com.example.prello.common.SessionName;
 import com.example.prello.deck.service.DeckService;
 import com.example.prello.exception.CommentErrorCode;
 import com.example.prello.exception.CustomException;
+import com.example.prello.member.auth.MemberPermissionService;
 import com.example.prello.user.entity.User;
 import com.example.prello.user.service.UserService;
 import com.example.prello.workspace.service.WorkspaceService;
@@ -34,10 +35,12 @@ public class CommentService {
     private final CardRepository cardRepository;
     private final UserService userService;
     private final HttpSession session;
+    private final MemberPermissionService memberPermissionService;
 
     //댓글 생성
     @Transactional
     public CommentResponseDto createComment(Long workspaceId, Long boardId, Long deckId, Long cardId, CommentRequestDto dto) {
+        memberPermissionService.validateBoardAccess(workspaceId);
         checkPathVariableIds(workspaceId, boardId, deckId, cardId);
 
         // 세션에서 userId 가져오기
@@ -62,6 +65,7 @@ public class CommentService {
     //댓글 수정
     @Transactional
     public CommentResponseDto updateComment(Long workspaceId, Long boardId, Long deckId, Long cardId, Long id, CommentRequestDto dto) {
+        memberPermissionService.validateBoardAccess(workspaceId);
         checkPathVariableIds(workspaceId, boardId, deckId, cardId);
 
         Comment findComment = findByIdOrElseThrow(id);
@@ -74,6 +78,7 @@ public class CommentService {
     //댓글 삭제
     @Transactional
     public void deleteComment(Long workspaceId, Long boardId, Long deckId, Long cardId, Long id) {
+        memberPermissionService.validateBoardAccess(workspaceId);
         checkPathVariableIds(workspaceId, boardId, deckId, cardId);
         Comment findComment = findByIdOrElseThrow(id);
 

@@ -1,4 +1,4 @@
-package com.example.prello.filter;
+package com.example.prello.security.filter;
 
 import com.example.prello.common.SessionName;
 import jakarta.servlet.*;

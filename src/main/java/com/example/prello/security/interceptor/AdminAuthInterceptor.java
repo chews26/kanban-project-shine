@@ -1,4 +1,4 @@
-package com.example.prello.interceptor;
+package com.example.prello.security.interceptor;
 
 import com.example.prello.user.enums.Auth;
 import com.example.prello.common.SessionName;

@@ -5,8 +5,11 @@ import com.example.prello.member.repository.MemberRepository;
 import com.example.prello.member.dto.MemberRequestDto;
 import com.example.prello.member.dto.MemberResponseDto;
 import com.example.prello.member.entity.Member;
+import com.example.prello.workspace.service.WorkspacePermissionService;
+import com.example.prello.security.session.SessionUtils;
 import com.example.prello.user.entity.User;
 import com.example.prello.user.service.UserService;
+import com.example.prello.workspace.dto.WorkspacePermissionDto;
 import com.example.prello.workspace.entity.Workspace;
 import com.example.prello.workspace.service.WorkspaceService;
 import jakarta.validation.Valid;
@@ -23,6 +26,8 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final WorkspaceService workspaceService;
     private final UserService userService;
+    private final SessionUtils sessionUtils;
+    private final WorkspacePermissionService workspacePermissionService;
 
 
     // 멤버권한 변경
@@ -32,18 +37,14 @@ public class MemberService {
     public MemberResponseDto updateMemberAuth(Long workspaceId, Long id, MemberRequestDto memberRequestDto) throws IllegalAccessException {
         Workspace workspace = workspaceService.findByIdOrElseThrow(workspaceId);
 
-        MemberAuth workspaceAuth = memberRepository.findMemberAuthByUserIdAndWorkspaceId(id, workspaceId)
-                .orElseThrow(() -> new IllegalAccessException("권한이 없습니다."));
-
-        if (workspaceAuth != MemberAuth.WORKSPACE) {
-            throw new IllegalAccessException("권한이 없습니다. 워크스페이스 권한이 필요합니다.");
-        }
+        Long userId = sessionUtils.getLoginUserId();
+        workspacePermissionService.validateWorkspaceOwner(workspaceId, userId);
 
         Member member = findByIdWithUserOrElseThrow(id);
-
         MemberAuth currentAuth = member.getAuth();
-
         member.updateMemberAuth(memberRequestDto.getAuth());
+
+        sessionUtils.updateWorkspacePermission(id, MemberAuth.WORKSPACE);
 
         return MemberResponseDto.toDto(member);
     }
@@ -52,7 +53,12 @@ public class MemberService {
     // todo 세션에서 유저정보 확인 후 권한 체크 필요
     @Transactional
     public String addWorkspaceMember(Long workspaceId, @Valid MemberRequestDto memberRequestDto) {
+        Long userId = sessionUtils.getLoginUserId();
+
+        workspacePermissionService.validateWorkspaceOwner(workspaceId, userId);
+
         Workspace workspace = workspaceService.findByIdOrElseThrow(workspaceId);
+
         User user = userService.findUserByEmailOrElseThrow(memberRequestDto.getEmail());
 
         boolean isAlreadyMember = memberRepository.existsByUserIdAndWorkspaceId(user.getId(), workspaceId);
@@ -68,6 +74,8 @@ public class MemberService {
 
         memberRepository.save(member);
 
+        sessionUtils.updateWorkspacePermission(userId, MemberAuth.WORKSPACE);
+
         return "멤버가 추가되었습니다." + user.getEmail();
     }
 
@@ -75,6 +83,8 @@ public class MemberService {
     // todo 세션에서 유저정보 확인 후 권한 체크 필요
     public List<MemberResponseDto> getWorkspaceMembers(Long workspaceId) {
         Workspace workspace = workspaceService.findByIdOrElseThrow(workspaceId);
+        Long userId = sessionUtils.getLoginUserId();
+        workspacePermissionService.validateWorkspaceAccess(workspaceId, userId, MemberAuth.READ_ONLY);
 
         List<Member> workspaceMember = getMembersByWorkspaceId(workspaceId);
         return workspaceMember.stream()
@@ -96,5 +106,10 @@ public class MemberService {
 
     private List<Member> getMembersByWorkspaceId(Long workspaceId) {
         return memberRepository.findByWorkspaceId(workspaceId);
+    }
+
+    // 사용자와 관련된 워크스페이스 권한 정보를 반환
+    public List<WorkspacePermissionDto> getWorkspacePermissionsByUserId(Long userId) {
+        return memberRepository.findWorkspacePermissionsByUserId(userId);
     }
 }

@@ -2,6 +2,7 @@ package com.example.prello.comment.service;
 
 import com.example.prello.board.service.BoardService;
 import com.example.prello.card.entity.Card;
+import com.example.prello.card.repository.CardRepository;
 import com.example.prello.card.service.CardService;
 import com.example.prello.comment.dto.CommentRequestDto;
 import com.example.prello.comment.dto.CommentResponseDto;
@@ -21,7 +22,8 @@ public class CommentService {
     private final WorkspaceService workspaceService;
     private final BoardService boardService;
     private final DeckService deckService;
-    private final CardService cardService;
+
+    private final CardRepository cardRepository;
 
     //댓글 생성
     @Transactional
@@ -79,6 +81,6 @@ public class CommentService {
         deckService.findByIdOrElseThrow(deckId);
 
         //card 검증
-        return cardService.findByIdOrElseThrow(cardId);
+        return cardRepository.findByIdOrElseThrow(cardId);
     }
 }

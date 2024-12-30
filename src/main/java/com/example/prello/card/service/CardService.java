@@ -1,23 +1,24 @@
 package com.example.prello.card.service;
 
 import com.example.prello.board.service.BoardService;
-import com.example.prello.card.dto.CardAssigneesRequestDto;
-import com.example.prello.card.dto.CardDetailResponseDto;
-import com.example.prello.card.dto.CardRequestDto;
-import com.example.prello.card.dto.CardResponseDto;
+import com.example.prello.card.dto.*;
 import com.example.prello.card.entity.Card;
 import com.example.prello.card.repository.CardRepository;
 import com.example.prello.comment.entity.Comment;
 import com.example.prello.comment.repository.CommentRepository;
+import com.example.prello.comment.service.CommentService;
 import com.example.prello.deck.entity.Deck;
 import com.example.prello.deck.service.DeckService;
 import com.example.prello.user.entity.User;
 import com.example.prello.user.service.UserService;
 import com.example.prello.workspace.service.WorkspaceService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -30,7 +31,7 @@ public class CardService {
     private final BoardService boardService;
     private final DeckService deckService;
     private final UserService userService;
-
+    private final CommentService commentService;
     private final CommentRepository commentRepository;
 
 
@@ -86,6 +87,24 @@ public class CardService {
 
         return new CardDetailResponseDto(findCard, comments);
     }
+
+    public Page<CardSearchResponseDto> findBySearch(Long workspaceId, Long boardId, String title, String description,
+                                                    LocalDateTime endAt, String assigneeName, Pageable pageable) {
+
+        workspaceService.findByIdOrElseThrow(workspaceId);
+        Page<Card> cardPage = cardRepository.findBySearch(boardId, title, description, endAt, assigneeName, pageable);
+
+        if (!cardPage.getContent().isEmpty()) {
+            Card firstCard = cardPage.getContent().get(0);
+         }
+
+        Page<CardSearchResponseDto> cards = cardPage
+                .map(card -> new CardSearchResponseDto(card, commentService.findByCardId(card.getId())));
+
+        return cards;
+    }
+
+
 
     /**
      * 카드 삭제 서비스 메서드

@@ -1,6 +1,6 @@
 package com.example.prello.card.service;
 
-import com.example.prello.board.BoardService;
+import com.example.prello.board.service.BoardService;
 import com.example.prello.card.dto.CardAssigneesRequestDto;
 import com.example.prello.card.dto.CardDetailResponseDto;
 import com.example.prello.card.dto.CardRequestDto;
@@ -31,7 +31,6 @@ public class CardService {
     private final WorkspaceService workspaceService;
     private final BoardService boardService;
     private final DeckService deckService;
-    private final CommentService commentService;
     private final UserService userService;
 
 

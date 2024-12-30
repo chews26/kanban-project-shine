@@ -21,7 +21,7 @@ public class Deck extends BaseEntity {
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
+    @Column(name = "`order`", nullable = false)
     private int order;
 
     @ManyToOne

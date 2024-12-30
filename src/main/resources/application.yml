@@ -22,3 +22,10 @@ spring:
       ddl-auto: create
       naming:
         physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+
+### Swagger ###
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true

@@ -33,3 +33,8 @@ springdoc:
     enabled: true
   swagger-ui:
     enabled: true
+
+### Slack ###
+webhook:
+  slack:
+    url: ${SLACK_WEBHOOK_URL}

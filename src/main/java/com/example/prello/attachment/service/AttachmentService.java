@@ -6,6 +6,7 @@ import com.example.prello.attachment.dto.AttachmentResponseDto;
 import com.example.prello.attachment.entity.Attachment;
 import com.example.prello.attachment.repository.AttachmentRepository;
 import com.example.prello.card.entity.Card;
+import com.example.prello.card.repository.CardRepository;
 import com.example.prello.card.service.CardService;
 import com.example.prello.exception.AttachmentErrorCode;
 import com.example.prello.exception.CustomException;
@@ -33,7 +34,7 @@ public class AttachmentService {
     private final AttachmentRepository attachmentRepository;
 
     private final FileStore fileStore;
-    private final CardService cardService;
+    private final CardRepository cardRepository;
 
     /**
      * 첨부파일 등록 서비스 메서드
@@ -119,8 +120,8 @@ public class AttachmentService {
      */
     @Transactional
     public void addAttachmentToCard(Long cardId, Long attachmentId) {
-        Card findCard = cardService.findByIdOrElseThrow(cardId);
-        Attachment findAttachment = attachmentRepository.findByIdOrElseThrow(attachmentId);
+        Card findCard = cardRepository.findByIdOrElseThrow(cardId);
+        Attachment findAttachment = findByIdOrElseThrow(attachmentId);
 
         findAttachment.addAttachmentToCard(findCard);
     }

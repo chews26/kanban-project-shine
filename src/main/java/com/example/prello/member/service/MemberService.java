@@ -61,6 +61,11 @@ public class MemberService {
     public String addWorkspaceMember(Long workspaceId, @Valid MemberRequestDto memberRequestDto) {
         Long userId = sessionUtils.getLoginUserId();
 
+        String email = memberRequestDto.getEmail();
+        if (email == null || email.isBlank()) {
+            throw new IllegalArgumentException("이메일이 null이거나 비어 있습니다.");
+        }
+
         workspacePermissionService.validateWorkspaceOwner(workspaceId, userId);
 
         Workspace workspace = workspaceService.findByIdOrElseThrow(workspaceId);

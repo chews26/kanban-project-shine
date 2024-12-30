@@ -63,7 +63,7 @@ public class MemberService {
 
         String email = memberRequestDto.getEmail();
         if (email == null || email.isBlank()) {
-            throw new IllegalArgumentException("이메일이 null이거나 비어 있습니다.");
+            throw new CustomException(MemberErrorCode.AUTH_EMPTY);
         }
 
         workspacePermissionService.validateWorkspaceOwner(workspaceId, userId);

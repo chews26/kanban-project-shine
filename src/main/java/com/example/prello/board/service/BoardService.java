@@ -47,7 +47,6 @@ public class BoardService {
     }
 
     // 보드 수정
-    // todo worksapce + board id fetch join 필요
     public BoardResponseDto updateBoard(Long workspaceId, Long id, BoardRequestDto boardRequestDto) {
 
         Board board = findByWorkspaceIdAndBoardIdOrElseThrow(workspaceId, id);
@@ -67,7 +66,6 @@ public class BoardService {
     }
 
     // 보드 상세 조회
-    // todo worksapce + board id fetch join 필요
     public BoardResponseDto getBoard(Long workspaceId, Long boardId) {
         Board board = findByWorkspaceIdAndBoardIdOrElseThrow(workspaceId, boardId);
 
@@ -92,7 +90,6 @@ public class BoardService {
     }
 
     // 보드 삭제
-    // todo worksapce + board id fetch join 필요
     public String deleteBoard(Long workspaceId, Long id) {
         findByWorkspaceIdAndBoardIdOrElseThrow(workspaceId, id);
         boardRepository.deleteById(id);

@@ -39,13 +39,6 @@ public class Attachment extends BaseEntity {
     public Attachment() {
     }
 
-    public Attachment(String uploadFileName, String storeFileName, String fileUrl, String fileType) {
-        this.uploadFileName = uploadFileName;
-        this.storeFileName = storeFileName;
-        this.fileUrl = fileUrl;
-        this.fileType = fileType;
-    }
-
     public void addAttachmentToCard(Card card) {
         this.card = card;
     }

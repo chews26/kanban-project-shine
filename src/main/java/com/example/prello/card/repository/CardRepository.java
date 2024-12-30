@@ -11,7 +11,6 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 public interface CardRepository extends JpaRepository<Card, Long> {
 
@@ -33,8 +32,7 @@ public interface CardRepository extends JpaRepository<Card, Long> {
                                                 @Param("boardId") Long boardId);
 
     default List<Card> findCardsByWorkspaceIdAndBoardIdOrElseThrow(Long workspaceId, Long boardId) {
-        List<Card> cards = findCardsByWorkspaceIdAndBoardId(workspaceId, boardId);
-        return cards;
+        return findCardsByWorkspaceIdAndBoardId(workspaceId, boardId);
     }
 
     @Query("SELECT DISTINCT c FROM Card c " +
@@ -54,14 +52,4 @@ public interface CardRepository extends JpaRepository<Card, Long> {
             @Param("userName") String assigneeName,
             Pageable pageable
     );
-
-
-//    @Query(
-//            "SELECT c FROM Card c "
-//            + "JOIN FETCH c.deck d "
-//            + "JOIN FETCH d.board b "
-//            + "JOIN FETCH b.workspace w "
-//            + "WHERE c.id = :cardId"
-//    )
-//    Optional<Card> checkPathVariableAndReturn(Long workspaceId, Long boardId, Long deckId, @Param("cardId") Long cardId);
 }

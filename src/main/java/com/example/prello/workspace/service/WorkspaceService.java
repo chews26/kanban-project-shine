@@ -1,6 +1,7 @@
 package com.example.prello.workspace.service;
 
-import com.example.prello.common.SessionName;
+import com.example.prello.exception.CustomException;
+import com.example.prello.exception.WorkspaceErrorCode;
 import com.example.prello.member.auth.MemberAuth;
 import com.example.prello.security.session.SessionUtils;
 import com.example.prello.workspace.dto.WorkspacePermissionDto;
@@ -10,10 +11,8 @@ import com.example.prello.workspace.entity.Workspace;
 import com.example.prello.workspace.repository.WorkspaceRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -43,8 +42,7 @@ public class WorkspaceService {
     // todo 워크스페이스 소유자만 워크스페이스 수정가능하게 로직 수정 필요
     @Transactional
     public WorkspaceResponseDto updateWorkspace(Long id, @Valid WorkspaceRequestDto workspaceRequestDto) {
-        Workspace workspace = workspaceRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 워크스페이스가 존재하지 않습니다."));
+        Workspace workspace = findByIdOrElseThrow(id);
 
         WorkspacePermissionDto permission = sessionUtils.getWorkspacePermission(id);
 
@@ -62,15 +60,13 @@ public class WorkspaceService {
 
     // 워크스페이스 상세 조회
     public WorkspaceResponseDto getWorkspace(Long id) {
-        Workspace workspace = workspaceRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 워크스페이스가 존재하지 않습니다."));
+        Workspace workspace = findByIdOrElseThrow(id);
         return WorkspaceResponseDto.toDto(workspace);
     }
 
     // 워크스페이스 삭제
     public String deleteWorkspace(Long id) {
-        Workspace workspace = workspaceRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 워크스페이스가 존재하지 않습니다."));
+        Workspace workspace = findByIdOrElseThrow(id);
 
         sessionUtils.removeWorkspacePermission(id);
 
@@ -81,6 +77,6 @@ public class WorkspaceService {
 
     public Workspace findByIdOrElseThrow(Long id) {
         return workspaceRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException(""));
+                .orElseThrow(() -> new CustomException(WorkspaceErrorCode.WORKSPACE_NOT_FOUND));
     }
 }

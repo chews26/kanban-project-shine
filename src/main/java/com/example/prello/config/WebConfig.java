@@ -15,7 +15,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
 
     private static final String[] ADMIN_REQUIRED_PATHS = {"/api/workspaces", "/api/workspaces/*/members/*"};
-    private static final String[] MEMBER_REQUIRED_PATHS = {"/api/workspaces", "/api/workspaces/*/members/*"};
 
     private final AdminAuthInterceptor adminAuthInterceptor;
 

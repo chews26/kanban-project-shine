@@ -7,6 +7,8 @@ import com.example.prello.deck.repository.DeckRepository;
 import com.example.prello.deck.dto.DeckRequestDto;
 import com.example.prello.deck.dto.DeckResponseDto;
 import com.example.prello.deck.entity.Deck;
+import com.example.prello.exception.CustomException;
+import com.example.prello.exception.DeckErrorCode;
 import com.example.prello.workspace.service.WorkspaceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -72,12 +74,12 @@ public class DeckService {
             newOrder = 0;
         }
 
-        //order값 변경이 없을떄
+        // order값 변경이 없을떄
         if (currentOrder == newOrder) {
             return DeckResponseDto.toDto(findDeck);
         }
 
-        //order값이 변경 되었을때
+        // order값이 변경 되었을때
 
         if(newOrder > currentOrder) {
             List<Deck> deckUpdate = deckRepository.findDecksInOrderRange(boardId, currentOrder + 1, newOrder);
@@ -109,7 +111,7 @@ public class DeckService {
     //리스트 id로 조회
     public Deck findByIdOrElseThrow(Long id) {
         return deckRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("리스트를 찾을 수 없습니다."));
+                .orElseThrow(() -> new CustomException(DeckErrorCode.DECK_NOT_FOUND));
     }
 
     //workspace, board 검증 및 board 반환

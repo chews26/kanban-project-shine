@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/workspaces/{workspaceId}/boards/{boardId}/lists/{listId}/cards/{cardId}/comments")
+@RequestMapping("/api/workspaces/{workspaceId}/boards/{boardId}/decks/{deckId}/cards/{cardId}/comments")
 public class CommentController {
 
     private final CommentService commentService;
@@ -21,11 +21,11 @@ public class CommentController {
     public ResponseEntity<CommentResponseDto> createComment(
             @PathVariable Long workspaceId,
             @PathVariable Long boardId,
-            @PathVariable Long listId,
+            @PathVariable Long deckId,
             @PathVariable Long cardId,
             @Valid @RequestBody CommentRequestDto dto) {
 
-            CommentResponseDto commentResponseDto = commentService.createComment(workspaceId, boardId, listId, cardId, dto);
+            CommentResponseDto commentResponseDto = commentService.createComment(workspaceId, boardId, deckId, cardId, dto);
             return new ResponseEntity<>(commentResponseDto, HttpStatus.CREATED);
     }
     //댓글 수정
@@ -33,12 +33,12 @@ public class CommentController {
     public ResponseEntity<CommentResponseDto> updateComment(
             @PathVariable Long workspaceId,
             @PathVariable Long boardId,
-            @PathVariable Long listId,
+            @PathVariable Long deckId,
             @PathVariable Long cardId,
             @PathVariable Long id,
             @Valid @RequestBody CommentRequestDto dto) {
 
-            CommentResponseDto commentResponseDto = commentService.updateComment(workspaceId, boardId, listId, cardId, id, dto);
+            CommentResponseDto commentResponseDto = commentService.updateComment(workspaceId, boardId, deckId, cardId, id, dto);
              return new ResponseEntity<>(commentResponseDto, HttpStatus.OK);
     }
 
@@ -48,11 +48,11 @@ public class CommentController {
     public ResponseEntity<String> deleteComment(
             @PathVariable Long workspaceId,
             @PathVariable Long boardId,
-            @PathVariable Long listId,
+            @PathVariable Long deckId,
             @PathVariable Long cardId,
             @PathVariable Long id
     ) {
-            commentService.deleteComment(workspaceId, boardId, listId, cardId, id);
+            commentService.deleteComment(workspaceId, boardId, deckId, cardId, id);
             return new ResponseEntity<>("댓글이 삭제되었습니다", HttpStatus.OK);
     }
 }

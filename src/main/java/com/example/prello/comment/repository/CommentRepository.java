@@ -18,7 +18,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     @Query(
             "SELECT co FROM Comment co "
             + "JOIN FETCH co.card ca "
-            + "WHERE ca = :cardId "
+            + "WHERE ca.id = :cardId "
             + "ORDER BY co.createdAt"
     )
     List<Comment> findLatestCommentsByCardId(@Param("cardId") Long cardId);

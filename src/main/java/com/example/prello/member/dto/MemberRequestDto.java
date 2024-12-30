@@ -2,6 +2,7 @@ package com.example.prello.member.dto;
 
 import com.example.prello.member.auth.MemberAuth;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
@@ -13,8 +14,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MemberRequestDto {
 
-    @NotBlank(message = "권한은 필수 입력값 입니다.")
-    @Size(max = 8, message = "입력 범위를 초과하였습니다.")
+    @NotNull(message = "권한은 필수 입력값 입니다.")
     private final MemberAuth auth;
 
     @NotBlank(message = "이메일은 필수 입니다.")

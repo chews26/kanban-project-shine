@@ -26,17 +26,19 @@ public class AttachmentController {
     private final AttachmentService attachmentService;
 
     /**
-     * 첨부 파일 등록
+     * 카드에 첨부 파일 등록
      *
-     * @param form 첨부 파일 폼
+     * @param form   첨부 파일 폼
+     * @param cardId 카드 식별자
      * @return 201 CREATED
      */
-    @PostMapping
+    @PostMapping("/{cardId}")
     public ResponseEntity<AttachmentResponseDto> createAttachment(
-            @Valid @ModelAttribute AttachmentForm form
+            @Valid @ModelAttribute AttachmentForm form,
+            @PathVariable Long cardId
     ) {
 
-        AttachmentResponseDto attachmentResponseDto = attachmentService.createAttachment(form);
+        AttachmentResponseDto attachmentResponseDto = attachmentService.createAttachment(form, cardId);
         return new ResponseEntity<>(attachmentResponseDto, HttpStatus.CREATED);
     }
 

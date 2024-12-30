@@ -7,18 +7,14 @@ import com.example.prello.attachment.entity.Attachment;
 import com.example.prello.attachment.repository.AttachmentRepository;
 import com.example.prello.card.entity.Card;
 import com.example.prello.card.repository.CardRepository;
-import com.example.prello.card.service.CardService;
 import com.example.prello.exception.AttachmentErrorCode;
 import com.example.prello.exception.CustomException;
-import com.example.prello.exception.ExceptionType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,11 +35,12 @@ public class AttachmentService {
     /**
      * 첨부파일 등록 서비스 메서드
      *
-     * @param form 첨부파일 포함된 정보 폼
+     * @param form   첨부파일 포함된 정보 폼
+     * @param cardId 카드 식별자
      * @return 첨부파일 정보
      */
     @Transactional
-    public AttachmentResponseDto createAttachment(AttachmentForm form) {
+    public AttachmentResponseDto createAttachment(AttachmentForm form, Long cardId) {
         Attachment attachment;
         try {
             String storeFileName = fileStore.storeFile(form.getAttachFile());
@@ -62,6 +59,9 @@ public class AttachmentService {
         }
 
         Attachment savedAttachment = attachmentRepository.save(attachment);
+        // 카드에 첨부
+        addAttachmentToCard(cardId, savedAttachment.getId());
+
         return AttachmentResponseDto.toDto(savedAttachment);
     }
 
@@ -118,8 +118,7 @@ public class AttachmentService {
      * @param cardId       카드 식별자
      * @param attachmentId 첨부파일 식별자
      */
-    @Transactional
-    public void addAttachmentToCard(Long cardId, Long attachmentId) {
+    private void addAttachmentToCard(Long cardId, Long attachmentId) {
         Card findCard = cardRepository.findByIdOrElseThrow(cardId);
         Attachment findAttachment = attachmentRepository.findByIdOrElseThrow(attachmentId);
 

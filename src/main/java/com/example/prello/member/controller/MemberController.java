@@ -23,7 +23,7 @@ public class MemberController {
     public ResponseEntity<MemberResponseDto> updateMemberAuth(
             @PathVariable Long workspaceId,
             @PathVariable Long id,
-            @RequestBody MemberRequestDto memberRequestDto
+            @Valid @RequestBody MemberRequestDto memberRequestDto
     ) throws IllegalAccessException {
         MemberResponseDto updatedMemberAuth = memberService.updateMemberAuth(workspaceId, id, memberRequestDto);
         return new ResponseEntity<>(updatedMemberAuth, HttpStatus.OK);

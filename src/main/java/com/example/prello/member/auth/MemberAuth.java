@@ -1,5 +1,8 @@
 package com.example.prello.member.auth;
 
+import com.example.prello.exception.CustomException;
+
+import com.example.prello.exception.MemberErrorCode;
 import lombok.Getter;
 
 @Getter
@@ -34,8 +37,13 @@ public enum MemberAuth {
                 return auth;
             }
         }
-        // todo : 예외처리 controller mapping 필요
-        // 400 INVALID_AUTH 해당하는 권한을 찾을 수 없습니다.
-        throw new IllegalArgumentException("해당하는 권한을 찾을 수 없습니다. : " + authName);
+        throw new CustomException(MemberErrorCode.INVALID_AUTH);
+    }
+
+    public boolean hasPermission(MemberAuth requiredAuth) {
+        // 권한 비교 로직
+        if (this == WORKSPACE) return true; // 최상위 권한
+        if (this == BOARD && requiredAuth == READ_ONLY) return true; // BOARD는 READ_ONLY 허용
+        return this == requiredAuth;
     }
 }

@@ -121,7 +121,7 @@ public class AttachmentService {
     @Transactional
     public void addAttachmentToCard(Long cardId, Long attachmentId) {
         Card findCard = cardRepository.findByIdOrElseThrow(cardId);
-        Attachment findAttachment = findByIdOrElseThrow(attachmentId);
+        Attachment findAttachment = attachmentRepository.findByIdOrElseThrow(attachmentId);
 
         findAttachment.addAttachmentToCard(findCard);
     }

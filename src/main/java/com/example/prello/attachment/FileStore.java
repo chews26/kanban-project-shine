@@ -6,13 +6,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.UUID;
 
 @Component
 public class FileStore {
 
-    public String getFullPath(String fileName) {
-        return "C:/prello/" + fileName;
+    public String getDestinationFileUrl() {
+        // return new File("src/main/resources/static").getAbsolutePath();
+        return "C:/Prello";
     }
 
     /**
@@ -30,8 +32,13 @@ public class FileStore {
         String originalFilename = multipartFile.getOriginalFilename();
         String storeFileName = createStoreFileName(originalFilename);
 
-        String fileUrl = getFullPath(storeFileName);
-        multipartFile.transferTo(new File(fileUrl));
+        File destinationFolder = new File(getDestinationFileUrl());
+
+        destinationFolder.mkdirs();
+
+        String fileUrl = getDestinationFileUrl() + "/" + storeFileName;
+
+        multipartFile.transferTo(new File(destinationFolder, storeFileName));
 
         return Attachment.builder()
                 .uploadFileName(originalFilename)

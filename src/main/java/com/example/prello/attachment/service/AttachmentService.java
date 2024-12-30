@@ -9,14 +9,17 @@ import com.example.prello.card.entity.Card;
 import com.example.prello.card.service.CardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.UrlResource;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Service
@@ -67,15 +70,10 @@ public class AttachmentService {
      * @param id 첨부파일 식별자
      * @return 첨부파일 리소스
      */
-    public UrlResource downloadAttachment(Long id) {
+    public Resource downloadAttachment(Long id) {
         Attachment findAttachment = findByIdOrElseThrow(id);
         String storeFileName = findAttachment.getStoreFileName();
-        try {
-            return new UrlResource("file:" + fileStore.getFullPath(storeFileName));
-        } catch (MalformedURLException e) {
-            log.info(e.getMessage());
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 다운로드에 실패했습니다.");
-        }
+        return new FileSystemResource(new File(fileStore.getDestinationFileUrl(), storeFileName));
     }
 
     /**
@@ -97,7 +95,8 @@ public class AttachmentService {
      */
     public String createContentDisposition(Long id) {
         Attachment findAttachment = findByIdOrElseThrow(id);
-        return "attachment; filename=\"" + findAttachment.getUploadFileName() + "\"";
+        String encodedName = URLEncoder.encode(findAttachment.getUploadFileName(), StandardCharsets.UTF_8).replace("+", "%20");
+        return "attachment; filename=\"" + encodedName + "\"";
     }
 
     /**

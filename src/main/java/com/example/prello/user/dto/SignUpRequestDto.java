@@ -18,6 +18,8 @@ public class SignUpRequestDto {
     @NotBlank(message = "이름은 필수입니다.")
     private final String name;
 
+    @Size(min = 8, message = "비밀번호는 8글자 이상으로 입력해주세요.")
+    @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$", message = "비밀번호는 대소문자 포함 영문 + 숫자 + 특수문자 최소 1글자씩 입력해주세요.")
     @NotBlank(message = "비밀번호는 필수입니다.")
     private final String password;
 

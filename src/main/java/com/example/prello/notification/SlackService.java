@@ -30,7 +30,7 @@ public class SlackService {
     private String webhookUrl;
 
     // 슬랙 알림 보내는 메서드
-    private void sendSlackNotification(String title, HttpServletRequest request, String msg) {
+    public void sendSlackNotification(String title, HttpServletRequest request, String msg) {
         try {
             slackClient.send(webhookUrl, payload(p -> p
                     .text(title)

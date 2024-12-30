@@ -36,7 +36,7 @@ public class MemberService {
     // todo 세션에서 유저정보 확인 후 권한 체크 필요
     // todo 인증 인가 로직 수정 필요 (세션 사용필요)
     @Transactional
-    public MemberResponseDto updateMemberAuth(Long workspaceId, Long id, @Valid MemberRequestDto memberRequestDto) throws IllegalAccessException {
+    public MemberResponseDto updateMemberAuth(Long workspaceId, Long id, @Valid MemberRequestDto memberRequestDto) {
         Workspace workspace = workspaceService.findByIdOrElseThrow(workspaceId);
 
         Long userId = sessionUtils.getLoginUserId();

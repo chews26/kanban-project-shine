@@ -9,21 +9,21 @@ import lombok.Getter;
 public enum MemberAuth {
     WORKSPACE("workspace") {
         @Override
-        public void validateAuthChange(MemberAuth newAuth) throws IllegalAccessException {
+        public void validateAuthChange(MemberAuth newAuth) {
         }
     },
     BOARD("board") {
         @Override
-        public void validateAuthChange(MemberAuth newAuth) throws IllegalAccessException {
+        public void validateAuthChange(MemberAuth newAuth) {
         }
     },
     READ_ONLY("read-only") {
         @Override
-        public void validateAuthChange(MemberAuth newAuth) throws IllegalAccessException {
+        public void validateAuthChange(MemberAuth newAuth) {
         }
     };
 
-    public abstract void validateAuthChange(MemberAuth newAuth) throws IllegalAccessException;
+    public abstract void validateAuthChange(MemberAuth newAuth);
 
     private final String memberAuth;
 

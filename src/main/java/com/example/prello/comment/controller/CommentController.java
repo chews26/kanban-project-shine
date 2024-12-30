@@ -3,6 +3,8 @@ package com.example.prello.comment.controller;
 import com.example.prello.comment.dto.CommentRequestDto;
 import com.example.prello.comment.dto.CommentResponseDto;
 import com.example.prello.comment.service.CommentService;
+import com.example.prello.notification.SlackService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,8 @@ public class CommentController {
 
     private final CommentService commentService;
 
+    private final SlackService slackService;
+
     //댓글 생성
     @PostMapping
     public ResponseEntity<CommentResponseDto> createComment(
@@ -23,11 +27,14 @@ public class CommentController {
             @PathVariable Long boardId,
             @PathVariable Long deckId,
             @PathVariable Long cardId,
+            HttpServletRequest request,
             @Valid @RequestBody CommentRequestDto dto) {
 
-            CommentResponseDto commentResponseDto = commentService.createComment(workspaceId, boardId, deckId, cardId, dto);
-            return new ResponseEntity<>(commentResponseDto, HttpStatus.CREATED);
+        CommentResponseDto commentResponseDto = commentService.createComment(workspaceId, boardId, deckId, cardId, dto);
+        slackService.sendSlackNotification("새 댓글이 작성되었습니다.", request, commentResponseDto.getContent());
+        return new ResponseEntity<>(commentResponseDto, HttpStatus.CREATED);
     }
+
     //댓글 수정
     @PatchMapping("/{id}")
     public ResponseEntity<CommentResponseDto> updateComment(
@@ -38,8 +45,8 @@ public class CommentController {
             @PathVariable Long id,
             @Valid @RequestBody CommentRequestDto dto) {
 
-            CommentResponseDto commentResponseDto = commentService.updateComment(workspaceId, boardId, deckId, cardId, id, dto);
-             return new ResponseEntity<>(commentResponseDto, HttpStatus.OK);
+        CommentResponseDto commentResponseDto = commentService.updateComment(workspaceId, boardId, deckId, cardId, id, dto);
+        return new ResponseEntity<>(commentResponseDto, HttpStatus.OK);
     }
 
 
@@ -52,7 +59,7 @@ public class CommentController {
             @PathVariable Long cardId,
             @PathVariable Long id
     ) {
-            commentService.deleteComment(workspaceId, boardId, deckId, cardId, id);
-            return new ResponseEntity<>("댓글이 삭제되었습니다", HttpStatus.OK);
+        commentService.deleteComment(workspaceId, boardId, deckId, cardId, id);
+        return new ResponseEntity<>("댓글이 삭제되었습니다", HttpStatus.OK);
     }
 }

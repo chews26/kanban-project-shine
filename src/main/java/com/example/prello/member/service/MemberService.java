@@ -1,6 +1,8 @@
 package com.example.prello.member.service;
 
 import com.example.prello.exception.CustomException;
+import com.example.prello.exception.MemberErrorCode;
+import com.example.prello.exception.CustomException;
 import com.example.prello.exception.member.MemberErrorCode;
 import com.example.prello.member.auth.MemberAuth;
 import com.example.prello.member.repository.MemberRepository;
@@ -74,7 +76,7 @@ public class MemberService {
 
         boolean isAlreadyMember = memberRepository.existsByUserIdAndWorkspaceId(user.getId(), workspaceId);
         if (isAlreadyMember) {
-            throw new CustomException(MemberErrorCode.ALREADY_WORKSPACE_MEMBER);
+            throw new CustomException(MemberErrorCode.MEMBER_ALREADY_EXISTS);
         }
 
         Member member = Member.builder()
@@ -106,13 +108,13 @@ public class MemberService {
     // member id 확인
     public Member findMemberByIdOrElseThrow(Long id) {
         return memberRepository.findById(id)
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(() -> new CustomException(MemberErrorCode.MEMBER_NOT_FOUND));
     }
 
     // member id, user id 함께 확인 (fetch Join)
     private Member findByIdWithUserOrElseThrow(Long id) {
         return memberRepository.findByMemberIdWithUser(id)
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(() -> new CustomException(MemberErrorCode.MEMBER_NOT_FOUND));
     }
 
     private List<Member> getMembersByWorkspaceId(Long workspaceId) {

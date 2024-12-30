@@ -7,11 +7,11 @@ import com.example.prello.board.repository.BoardRepository;
 import com.example.prello.card.dto.CardResponseDto;
 import com.example.prello.card.entity.Card;
 import com.example.prello.card.repository.CardRepository;
-import com.example.prello.card.service.CardService;
-import com.example.prello.deck.dto.DeckResponseDto;
 import com.example.prello.deck.dto.DeckResponseWithCardsDto;
 import com.example.prello.deck.entity.Deck;
-import com.example.prello.deck.service.DeckService;
+import com.example.prello.exception.BoardErrorCode;
+import com.example.prello.exception.CustomException;
+import com.example.prello.exception.DeckErrorCode;
 import com.example.prello.workspace.entity.Workspace;
 import com.example.prello.workspace.service.WorkspaceService;
 import lombok.RequiredArgsConstructor;
@@ -80,7 +80,7 @@ public class BoardService {
                     Deck deck = cards.stream()
                             .filter(card -> card.getDeck().getId().equals(entry.getKey()))
                             .findFirst()
-                            .orElseThrow(() -> new IllegalArgumentException("덱 정보를 찾을 수 없습니다."))
+                            .orElseThrow(() -> new CustomException(DeckErrorCode.DECK_NOT_FOUND))
                             .getDeck();
                     return DeckResponseWithCardsDto.toDto(deck, entry.getValue());
                 })
@@ -99,11 +99,11 @@ public class BoardService {
     // 보드 findById
     public Board findByIdOrElseThrow(Long id) {
         return boardRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException());
+                .orElseThrow(() -> new CustomException(BoardErrorCode.BOARD_NOT_FOUND));
     }
 
     public Board findByWorkspaceIdAndBoardIdOrElseThrow(Long workspaceId, Long id) {
         return boardRepository.findByWorkspaceIdAndBoardId(workspaceId, id)
-                .orElseThrow(() -> new IllegalArgumentException());
+                .orElseThrow(() -> new CustomException(BoardErrorCode.BOARD_ROUTE_NOT_FOUND));
     }
 }

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/workspaces/{workspaceId}/boards/{boardId}/Decks")
+@RequestMapping("/api/workspaces/{workspaceId}/boards/{boardId}/decks")
 public class DeckController {
 
     private final DeckService deckService;

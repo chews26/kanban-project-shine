@@ -11,6 +11,7 @@ import com.example.prello.card.service.CardService;
 import com.example.prello.deck.dto.DeckResponseDto;
 import com.example.prello.deck.dto.DeckResponseWithCardsDto;
 import com.example.prello.deck.entity.Deck;
+import com.example.prello.deck.repository.DeckRepository;
 import com.example.prello.deck.service.DeckService;
 import com.example.prello.workspace.entity.Workspace;
 import com.example.prello.workspace.service.WorkspaceService;
@@ -28,6 +29,7 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final WorkspaceService workspaceService;
     private final CardRepository cardRepository;
+    private final DeckRepository deckRepository;
 
     // 보드 생성
     public BoardResponseDto createBoard(Long workspaceId, BoardRequestDto boardRequestDto) {
@@ -69,21 +71,21 @@ public class BoardService {
     public BoardResponseDto getBoard(Long workspaceId, Long boardId) {
         Board board = findByWorkspaceIdAndBoardIdOrElseThrow(workspaceId, boardId);
 
-        List<Card> cards = cardRepository.findCardsByWorkspaceIdAndBoardIdOrElseThrow(workspaceId, boardId);
+        List<Deck> decks = deckRepository.findByBoardId(boardId);
+
+        List<Card> cards = cardRepository.findCardsByWorkspaceIdAndBoardId(workspaceId, boardId);
 
         Map<Long, List<CardResponseDto>> cardsByDeck = cards.stream()
-                .collect(Collectors.groupingBy(card -> card.getDeck().getId(),
-                        Collectors.mapping(CardResponseDto::toDto, Collectors.toList())));
+                .collect(Collectors.groupingBy(
+                        card -> card.getDeck().getId(),
+                        Collectors.mapping(CardResponseDto::toDto, Collectors.toList())
+                ));
 
-        List<DeckResponseWithCardsDto> deckDtos = cardsByDeck.entrySet().stream()
-                .map(entry -> {
-                    Deck deck = cards.stream()
-                            .filter(card -> card.getDeck().getId().equals(entry.getKey()))
-                            .findFirst()
-                            .orElseThrow(() -> new IllegalArgumentException("덱 정보를 찾을 수 없습니다."))
-                            .getDeck();
-                    return DeckResponseWithCardsDto.toDto(deck, entry.getValue());
-                })
+        List<DeckResponseWithCardsDto> deckDtos = decks.stream()
+                .map(deck -> DeckResponseWithCardsDto.toDto(
+                        deck,
+                        cardsByDeck.getOrDefault(deck.getId(), List.of()) // 카드가 없으면 빈 리스트 반환
+                ))
                 .toList();
 
         return BoardResponseDto.toDto(board, deckDtos);

@@ -2,12 +2,15 @@ package com.example.prello.deck.service;
 
 import com.example.prello.board.entity.Board;
 import com.example.prello.board.service.BoardService;
+import com.example.prello.deck.dto.DeckUpdateRequestDto;
 import com.example.prello.deck.repository.DeckRepository;
 import com.example.prello.deck.dto.DeckRequestDto;
 import com.example.prello.deck.dto.DeckResponseDto;
 import com.example.prello.deck.entity.Deck;
+import com.example.prello.exception.CustomException;
+import com.example.prello.exception.DeckErrorCode;
+import com.example.prello.member.auth.MemberPermissionService;
 import com.example.prello.workspace.service.WorkspaceService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,15 +24,21 @@ public class DeckService {
     private final WorkspaceService workspaceService;
     private final BoardService boardService;
     private final DeckRepository deckRepository;
+    private final MemberPermissionService memberPermissionService;
 
     //리스트 생성
     @Transactional
     public DeckResponseDto createDeck(Long workspaceId, Long boardId, DeckRequestDto dto) {
-        Board board = checkPathVariable(workspaceId, boardId);
+        memberPermissionService.validateBoardAccess(workspaceId);
+        checkPathVariable(workspaceId, boardId);
+
+        Board board = boardService.findByIdOrElseThrow(boardId);
+
+        int newOrder = deckRepository.findMaxOrderByBoardId(boardId).orElse(0) + 1;
 
         Deck deck = Deck.builder()
                 .title(dto.getTitle())
-                .order(0)
+                .order(newOrder)
                 .board(board)
                 .build();
 
@@ -41,7 +50,8 @@ public class DeckService {
 
     //리스트 제목 수정
     @Transactional
-    public DeckResponseDto updateDeckTitle(Long workspaceId, Long boardId, Long id, @Valid DeckRequestDto dto) {
+    public DeckResponseDto updateDeckTitle(Long workspaceId, Long boardId, Long id, DeckUpdateRequestDto dto) {
+        memberPermissionService.validateBoardAccess(workspaceId);
         checkPathVariable(workspaceId, boardId);
 
         Deck findDeck = findByIdOrElseThrow(id);
@@ -52,19 +62,30 @@ public class DeckService {
 
     //리스트 순서 수정
     @Transactional
-    public DeckResponseDto updateDexkOrder(Long workspaceId, Long boardId, Long id, @Valid DeckRequestDto dto) {
+    public DeckResponseDto updateDeckOrder(Long workspaceId, Long boardId, Long id, DeckUpdateRequestDto dto) {
+        memberPermissionService.validateBoardAccess(workspaceId);
         checkPathVariable(workspaceId, boardId);
 
         Deck findDeck = findByIdOrElseThrow(id);
         int currentOrder = findDeck.getOrder();
         int newOrder = dto.getOrder();
 
-        //order값 변경이 없을떄
+        int maxOrder = deckRepository.findMaxOrderByBoardId(boardId).orElse(1);
+        if (newOrder > maxOrder) {
+            newOrder = maxOrder;
+        }
+
+        if (newOrder < 1) {
+            newOrder = 1;
+        }
+
+        // order값 변경이 없을떄
         if (currentOrder == newOrder) {
             return DeckResponseDto.toDto(findDeck);
         }
 
-        //order값이 변경 되었을때
+        // order값이 변경 되었을때
+
         if(newOrder > currentOrder) {
             List<Deck> deckUpdate = deckRepository.findDecksInOrderRange(boardId, currentOrder + 1, newOrder);
 
@@ -80,13 +101,13 @@ public class DeckService {
         }
 
         findDeck.updateDeckOrder(newOrder);
-
         return DeckResponseDto.toDto(findDeck);
     }
 
     //리스트 삭제
     @Transactional
     public void deleteDeck(Long workspaceId, Long boardId, Long id) {
+        memberPermissionService.validateBoardAccess(workspaceId);
         checkPathVariable(workspaceId, boardId);
 
         Deck findDeck = findByIdOrElseThrow(id);
@@ -96,15 +117,15 @@ public class DeckService {
     //리스트 id로 조회
     public Deck findByIdOrElseThrow(Long id) {
         return deckRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("리스트를 찾을 수 없습니다."));
+                .orElseThrow(() -> new CustomException(DeckErrorCode.DECK_NOT_FOUND));
     }
 
     //workspace, board 검증 및 board 반환
-    private Board checkPathVariable(Long workspaceId, Long boardId) {
+    private void checkPathVariable(Long workspaceId, Long boardId) {
         //workspace 검증
         workspaceService.findByIdOrElseThrow(workspaceId);
 
         //board 검증
-        return boardService.findByIdOrElseThrow(boardId);
+        boardService.findByIdOrElseThrow(boardId);
     }
 }
